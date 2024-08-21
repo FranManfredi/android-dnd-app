@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">mobile</string>
+    <string name="top_var">Character List</string>
+    <string name="search_var">Search</string>
 </resources>
