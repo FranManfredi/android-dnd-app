@@ -26,6 +26,7 @@ import com.example.mobile.ui.theme.orange
 
 @Composable
 fun TopBar(
+    onNavigateToSettings: () -> Unit,
     title: String
 ) {
     Row(
@@ -36,7 +37,7 @@ fun TopBar(
             .padding(horizontal = 24.dp, vertical = 8.dp)
     ) {
         Button(
-            onClick = { /* TODO */ },
+            onClick = { onNavigateToSettings() },
             colors = ButtonDefaults.buttonColors(Color.Transparent), // Sin color de fondo
             shape = CircleShape, // Forma redonda
             contentPadding = PaddingValues(0.dp), // Sin padding

@@ -1,4 +1,4 @@
-package com.example.mobile.home
+package com.example.mobile.pages.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,11 +16,11 @@ import com.example.mobile.navigation.MobileScreen
 @Preview
 @Composable
 fun PreviewHome() {
-    Home {  }
+    Home()
 }
 
 @Composable
-fun Home(onNavigateToSettings: () -> Unit) {
+fun Home() {
 
     Surface(
         modifier = Modifier.fillMaxSize(),

@@ -9,7 +9,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.mobile.home.Home
+import com.example.mobile.pages.compendium.Compendium
+import com.example.mobile.pages.home.Home
+import com.example.mobile.pages.settings.Settings
 
 
 @Composable
@@ -20,15 +22,14 @@ fun NavHostComposable(innerPadding: PaddingValues, navController: NavHostControl
         modifier = Modifier.fillMaxSize().padding(innerPadding).padding(horizontal = 10.dp)
     ) {
         composable(route = MobileScreen.Home.name) {
-            Home(
-                onNavigateToSettings = { navController.navigate(MobileScreen.Settings.name) }
-            )
+            Home()
         }
-//        composable(route = MobileScreen.Profile.name) {
-//            Profile()
-//        }
-//        composable(route = MobileScreen.Settings.name) {
-//            Settings()
-//        }
+        composable(route = MobileScreen.Settings.name) {
+            Settings()
+        }
+        composable(route = MobileScreen.Compendium.name) {
+            Compendium()
+        }
+
     }
 }

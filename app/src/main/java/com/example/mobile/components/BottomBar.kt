@@ -31,19 +31,28 @@ import java.nio.file.WatchEvent.Modifier
 
 @Composable
 fun BottomBar(
+    selectedRoute: String,
     onNavigate: (String) -> Unit,
 ) {
-
-    val homeTab =
-        TabBarItem(title = MobileScreen.Home.name, selectedIcon = Icons.Filled.Home, unselectedIcon = Icons.Outlined.Home)
-    val settingsTab =
-        TabBarItem(title = MobileScreen.Profile.name, selectedIcon = Icons.Filled.Star, unselectedIcon = Icons.Outlined.Star)
-    val moreTab =
-        TabBarItem(title = MobileScreen.Settings.name, selectedIcon = Icons.Filled.Person, unselectedIcon = Icons.Filled.Settings)
+    val homeTab = TabBarItem(
+        title = MobileScreen.Home.name,
+        selectedIcon = Icons.Filled.Home,
+        unselectedIcon = Icons.Outlined.Home
+    )
+    val settingsTab = TabBarItem(
+        title = MobileScreen.Compendium.name,
+        selectedIcon = Icons.Filled.Star,
+        unselectedIcon = Icons.Outlined.Star
+    )
+    val moreTab = TabBarItem(
+        title = MobileScreen.Settings.name,
+        selectedIcon = Icons.Filled.Settings,
+        unselectedIcon = Icons.Filled.Settings
+    )
 
     val tabBarItems = listOf(homeTab, settingsTab, moreTab)
 
-    TabView(tabBarItems, onNavigate)
+    TabView(tabBarItems, selectedRoute, onNavigate)
 }
 
 data class TabBarItem(
@@ -54,22 +63,23 @@ data class TabBarItem(
 )
 
 @Composable
-fun TabView(tabBarItems: List<TabBarItem>, onNavigate: (String) -> Unit) {
-    var selectedTabIndex by rememberSaveable {
-        mutableIntStateOf(0)
-    }
-
+fun TabView(
+    tabBarItems: List<TabBarItem>,
+    selectedRoute: String,
+    onNavigate: (String) -> Unit
+) {
     NavigationBar {
-        tabBarItems.forEachIndexed { index, tabBarItem ->
+        tabBarItems.forEach { tabBarItem ->
+            val isSelected = tabBarItem.title == selectedRoute
+
             NavigationBarItem(
-                selected = selectedTabIndex == index,
+                selected = isSelected,
                 onClick = {
-                    selectedTabIndex = index
                     onNavigate(tabBarItem.title)
                 },
                 icon = {
                     TabBarIconView(
-                        isSelected = selectedTabIndex == index,
+                        isSelected = isSelected,
                         selectedIcon = tabBarItem.selectedIcon,
                         unselectedIcon = tabBarItem.unselectedIcon,
                         title = tabBarItem.title,

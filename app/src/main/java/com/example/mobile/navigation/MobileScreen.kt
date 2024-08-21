@@ -3,7 +3,7 @@ package com.example.mobile.navigation
 enum class MobileScreen {
     Home,
 
-    Profile,
+    Compendium,
     Settings,
 }
 
