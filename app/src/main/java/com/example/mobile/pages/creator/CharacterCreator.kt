@@ -18,6 +18,12 @@ fun Creator(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Text(text = "esta es la pagina de creador de personaje", color = Color.Black, style = TextStyle.Default, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(
+            text = "esta es la pagina de creador de personaje",
+            color = Color.Black,
+            style = TextStyle.Default,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
