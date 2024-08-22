@@ -4,6 +4,8 @@ enum class MobileScreen {
     Home,
 
     Compendium,
+    Creator,
+
     Settings,
 }
 

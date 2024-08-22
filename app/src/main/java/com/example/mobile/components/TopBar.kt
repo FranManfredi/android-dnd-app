@@ -27,6 +27,7 @@ import com.example.mobile.ui.theme.orange
 @Composable
 fun TopBar(
     onNavigateToSettings: () -> Unit,
+    onNavigateToCreator: () -> Unit,
     title: String
 ) {
     Row(
@@ -49,7 +50,7 @@ fun TopBar(
         }
         Text(text = title, color = orange, style = TextStyle.Default, fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Button(
-            onClick = { /* TODO */ },
+            onClick = { onNavigateToCreator() },
             colors = ButtonDefaults.buttonColors(Color.Transparent), // Sin color de fondo
             shape = CircleShape, // Forma redonda
             contentPadding = PaddingValues(0.dp), // Sin padding

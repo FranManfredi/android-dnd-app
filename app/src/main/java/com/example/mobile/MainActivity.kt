@@ -40,15 +40,25 @@ class MainActivity : ComponentActivity() {
                         topBar = {
                             val navBackStackEntry by navController.currentBackStackEntryAsState()
                             navBackStackEntry?.destination?.route?.let {
-                                TopBar(onNavigateToSettings = {
-                                    navController.navigate(MobileScreen.Settings.name) {
+                                TopBar(
+                                    onNavigateToSettings = {
+                                        navController.navigate(MobileScreen.Settings.name) {
                                         popUpTo(navController.graph.startDestinationId) {
                                             saveState = true
                                         }
                                         launchSingleTop = true
                                         restoreState = true
-                                    }
-                                }, title = it)
+                                    }},
+                                    onNavigateToCreator = {
+                                        navController.navigate(MobileScreen.Creator.name){
+                                        popUpTo(navController.graph.startDestinationId) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }},
+                                    title = it
+                                )
                             }
                         },
                         bottomBar = {
