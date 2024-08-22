@@ -19,6 +19,10 @@ fun Compendium(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Text(text = "esta es la pagina del Compendium", color = Color.Black, style = TextStyle.Default, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(
+            text = "esta es la pagina del Compendium",
+            color = Color.Black, style = TextStyle.Default,
+            fontSize = 20.sp, fontWeight = FontWeight.Bold
+        )
     }
 }
