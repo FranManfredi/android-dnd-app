@@ -21,8 +21,10 @@ fun Compendium(
     ) {
         Text(
             text = "esta es la pagina del Compendium",
-            color = Color.Black, style = TextStyle.Default,
-            fontSize = 20.sp, fontWeight = FontWeight.Bold
+            color = Color.Black,
+            style = TextStyle.Default,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
         )
     }
 }
