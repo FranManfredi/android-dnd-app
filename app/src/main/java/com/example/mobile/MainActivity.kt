@@ -21,7 +21,9 @@ import com.example.mobile.components.TopBar
 import com.example.mobile.navigation.MobileScreen
 import com.example.mobile.navigation.NavHostComposable
 import com.example.mobile.ui.theme.MobileTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
