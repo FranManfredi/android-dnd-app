@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mobile.components.BottomBar
+import com.example.mobile.components.TOPBAR_TYPES
 import com.example.mobile.components.TopBar
 import com.example.mobile.navigation.MobileScreen
 import com.example.mobile.navigation.NavHostComposable
@@ -40,6 +41,12 @@ class MainActivity : ComponentActivity() {
                         topBar = {
                             val navBackStackEntry by navController.currentBackStackEntryAsState()
                             navBackStackEntry?.destination?.route?.let {
+
+                                val topBarType = when (it) {
+                                    "Creator" -> TOPBAR_TYPES.CREATOR
+                                    else -> TOPBAR_TYPES.NORMAL
+                                }
+
                                 TopBar(
                                     onNavigateToSettings = {
                                         navController.navigate(MobileScreen.Settings.name) {
@@ -57,7 +64,16 @@ class MainActivity : ComponentActivity() {
                                         launchSingleTop = true
                                         restoreState = true
                                     }},
-                                    title = it
+                                    onNavigateToHome = {
+                                        navController.navigate(MobileScreen.Home.name){
+                                            popUpTo(navController.graph.startDestinationId) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }},
+                                    title = it,
+                                    type = topBarType
                                 )
                             }
                         },
@@ -65,18 +81,23 @@ class MainActivity : ComponentActivity() {
                             val navBackStackEntry by navController.currentBackStackEntryAsState()
                             val currentRoute = navBackStackEntry?.destination?.route
 
-                            BottomBar(
-                                selectedRoute = currentRoute ?: MobileScreen.Home.name,
-                                onNavigate = { screen ->
-                                    navController.navigate(screen) {
-                                        popUpTo(navController.graph.startDestinationId) {
-                                            saveState = true
+                            // List of routes where BottomBar should be hidden
+                            val hideBottomBarRoutes = listOf(MobileScreen.Creator.name)
+
+                            if (currentRoute !in hideBottomBarRoutes) {
+                                BottomBar(
+                                    selectedRoute = currentRoute ?: MobileScreen.Home.name,
+                                    onNavigate = { screen ->
+                                        navController.navigate(screen) {
+                                            popUpTo(navController.graph.startDestinationId) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
                                         }
-                                        launchSingleTop = true
-                                        restoreState = true
                                     }
-                                }
-                            )
+                                )
+                            }
                         },
                     ) { innerPadding ->
                         NavHostComposable(innerPadding, navController)
