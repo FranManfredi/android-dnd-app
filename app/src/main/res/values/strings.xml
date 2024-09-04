@@ -2,4 +2,6 @@
     <string name="app_name">mobile</string>
     <string name="top_var">Character List</string>
     <string name="search_var">Search</string>
+
+    <string name="base_url">https://www.dnd5eapi.co/</string>
 </resources>
