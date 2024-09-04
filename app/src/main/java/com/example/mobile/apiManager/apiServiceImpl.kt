@@ -30,8 +30,8 @@ class ApiServiceImpl @Inject constructor() {
             override fun onResponse(response: Response<Int>?, retrofit: Retrofit?) {
                 loadingFinished()
                 if(response?.isSuccess == true) {
-                    val hitDice: Int = response.body()
-                    onSuccess(hitDice)
+                    val hit_die: Int = response.body()
+                    onSuccess(hit_die)
                 } else {
                     onFailure(Exception("Bad request"))
                 }

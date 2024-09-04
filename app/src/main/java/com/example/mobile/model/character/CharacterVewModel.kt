@@ -37,7 +37,10 @@ class CharacterViewModel @Inject constructor(
         }
     }
 
-    private fun calculateCharHp(characterClasses: Array<CharacterClass>, constitution: Int): CharacterHp {
+    private fun calculateCharHp(
+        characterClasses: Array<CharacterClass>,
+        constitution: Int
+    ): CharacterHp {
 
         var total: Int = (constitution - 10)/2
 
