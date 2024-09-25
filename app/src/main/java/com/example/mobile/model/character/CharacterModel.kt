@@ -6,22 +6,11 @@ data class Character(
     val characterClasses: Array<CharacterClass>?,
     val baseStats: BaseStats?,
     val proficiency: CharacterProficiency?,
-    val background: CharacterBackground?,
+    val background: String,
     val traits: Array<Trait>?,
 
     // untouchable element
     val hp: CharacterHp?,
-)
-
-data class CharacterBackground (
-    var background: String,
-    var alignment: String?,
-    var faith: String?,
-    var personalityTraits: String?,
-    var ideals: String?,
-    var bonds: String?,
-    var flaws: String?,
-    var description: String?,
 )
 
 data class BaseStats(

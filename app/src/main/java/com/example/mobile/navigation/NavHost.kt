@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import com.example.mobile.pages.compendium.Compendium
 import com.example.mobile.pages.creator.Creator
 import com.example.mobile.pages.home.Home
+import com.example.mobile.pages.items.Items
 import com.example.mobile.pages.settings.Settings
 
 
@@ -29,10 +30,13 @@ fun NavHostComposable(innerPadding: PaddingValues, navController: NavHostControl
             Settings()
         }
         composable(route = MobileScreen.Compendium.name) {
-            Compendium()
+            Compendium(navController)
         }
         composable(route = MobileScreen.Creator.name){
             Creator()
+        }
+        composable(route = MobileScreen.Items.name){
+            Items()
         }
     }
 }

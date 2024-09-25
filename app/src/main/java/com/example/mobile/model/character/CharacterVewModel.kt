@@ -25,7 +25,7 @@ class CharacterViewModel @Inject constructor(
                       characterClasses: Array<CharacterClass>,
                       baseStats: BaseStats,
                       proficiency: CharacterProficiency,
-                      background: CharacterBackground,
+                      background: String,
                       traits: Array<Trait>) {
 
         val hp = calculateCharHp(characterClasses, baseStats.con)

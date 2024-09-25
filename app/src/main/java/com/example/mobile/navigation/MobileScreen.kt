@@ -4,6 +4,13 @@ enum class MobileScreen {
     Home,
 
     Compendium,
+    Weapons,
+    Spells,
+    Races,
+    Items,
+    Classes,
+    Armour,
+
     Creator,
 
     Settings,
