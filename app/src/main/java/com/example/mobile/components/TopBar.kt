@@ -36,14 +36,16 @@ fun TopBar(
     ) {
         ButtonWithIcon(onNavigate = { onNavigateToSettings() }, icon = Icons.Filled.Settings)
         Text(text = title, color = orange, style = TextStyle.Default, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        if(type == TOPBAR_TYPES.CREATOR) {
-            ButtonWithIcon(onNavigate = { onNavigateToHome() }, icon = Icons.AutoMirrored.Rounded.ArrowBack)
-        }
-        if (type == TOPBAR_TYPES.COMPENDIUM) {
-            ButtonWithIcon(onNavigate = { onNavigateToCompendium() }, icon = Icons.AutoMirrored.Rounded.ArrowBack)
-        }
-        else{
-            ButtonWithIcon(onNavigate = { onNavigateToCreator() }, icon = Icons.Filled.AddCircle)
+        when (type) {
+            TOPBAR_TYPES.CREATOR -> {
+                ButtonWithIcon(onNavigate = { onNavigateToHome() }, icon = Icons.AutoMirrored.Rounded.ArrowBack)
+            }
+            TOPBAR_TYPES.COMPENDIUM -> {
+                ButtonWithIcon(onNavigate = { onNavigateToCompendium() }, icon = Icons.AutoMirrored.Rounded.ArrowBack)
+            }
+            else -> {
+                ButtonWithIcon(onNavigate = { onNavigateToCreator() }, icon = Icons.Filled.AddCircle)
+            }
         }
     }
 }
