@@ -9,11 +9,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.mobile.screen.armors.Armor
+import com.example.mobile.screen.classes.Classes
 import com.example.mobile.screen.compendium.Compendium
 import com.example.mobile.screen.creator.Creator
 import com.example.mobile.screen.home.Home
 import com.example.mobile.screen.items.Items
+import com.example.mobile.screen.races.Races
 import com.example.mobile.screen.settings.Settings
+import com.example.mobile.screen.spells.Spells
+import com.example.mobile.screen.weapons.Weapons
 
 
 @Composable
@@ -35,8 +40,23 @@ fun NavHostComposable(innerPadding: PaddingValues, navController: NavHostControl
         composable(route = MobileScreen.Creator.name){
             Creator()
         }
+        composable(route = MobileScreen.Weapons.name){
+            Weapons()
+        }
+        composable(route = MobileScreen.Spells.name){
+            Spells()
+        }
+        composable(route = MobileScreen.Armour.name){
+            Armor()
+        }
         composable(route = MobileScreen.Items.name){
             Items()
+        }
+        composable(route = MobileScreen.Classes.name){
+            Classes()
+        }
+        composable(route = MobileScreen.Races.name){
+            Races()
         }
     }
 }
