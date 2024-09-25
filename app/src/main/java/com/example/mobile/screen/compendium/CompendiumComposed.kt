@@ -1,4 +1,4 @@
-package com.example.mobile.pages.compendium
+package com.example.mobile.screen.compendium
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,14 +29,25 @@ import com.example.mobile.ui.theme.orange
 
 @Composable
 fun Compendium(navController: NavHostController) {
+    // Helper function to navigate with custom options
+    val navigateWithOptions: (String) -> Unit = { route ->
+        navController.navigate(route) {
+            popUpTo(navController.graph.startDestinationId) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
     // List of lambda functions for navigation, each corresponding to a different screen
     val navigation: List<(NavHostController) -> Unit> = listOf(
-        { navController.navigate(MobileScreen.Weapons.name) }, // Navigate to Weapons screen
-        { navController.navigate(MobileScreen.Spells.name) },  // Navigate to Spells screen
-        { navController.navigate(MobileScreen.Armour.name) },  // Navigate to Armors screen
-        { navController.navigate(MobileScreen.Items.name) },   // Navigate to Items screen
-        { navController.navigate(MobileScreen.Classes.name) }, // Navigate to Classes screen
-        { navController.navigate(MobileScreen.Races.name) }    // Navigate to Races screen
+        { navigateWithOptions(MobileScreen.Weapons.name) },  // Navigate to Weapons screen
+        { navigateWithOptions(MobileScreen.Spells.name) },   // Navigate to Spells screen
+        { navigateWithOptions(MobileScreen.Armour.name) },   // Navigate to Armour screen
+        { navigateWithOptions(MobileScreen.Items.name) },    // Navigate to Items screen
+        { navigateWithOptions(MobileScreen.Classes.name) },  // Navigate to Classes screen
+        { navigateWithOptions(MobileScreen.Races.name) }     // Navigate to Races screen
     )
 
     Surface(
@@ -50,7 +61,6 @@ fun Compendium(navController: NavHostController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             // List of button labels
             val buttons = listOf(
                 R.string.weapons,

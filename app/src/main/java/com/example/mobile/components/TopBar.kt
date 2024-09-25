@@ -23,6 +23,7 @@ fun TopBar(
     onNavigateToSettings: () -> Unit,
     onNavigateToCreator: () -> Unit,
     onNavigateToHome: () -> Unit,
+    onNavigateToCompendium: () -> Unit,
     title: String,
     type: TOPBAR_TYPES
 ) {
@@ -38,6 +39,9 @@ fun TopBar(
         if(type == TOPBAR_TYPES.CREATOR) {
             ButtonWithIcon(onNavigate = { onNavigateToHome() }, icon = Icons.AutoMirrored.Rounded.ArrowBack)
         }
+        if (type == TOPBAR_TYPES.COMPENDIUM) {
+            ButtonWithIcon(onNavigate = { onNavigateToCompendium() }, icon = Icons.AutoMirrored.Rounded.ArrowBack)
+        }
         else{
             ButtonWithIcon(onNavigate = { onNavigateToCreator() }, icon = Icons.Filled.AddCircle)
         }
@@ -46,5 +50,6 @@ fun TopBar(
 
 enum class TOPBAR_TYPES{
     NORMAL,
-    CREATOR
+    CREATOR,
+    COMPENDIUM
 }

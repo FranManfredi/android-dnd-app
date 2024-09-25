@@ -1,4 +1,4 @@
-package com.example.mobile.pages.home
+package com.example.mobile.screen.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,8 +10,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.mobile.R
 import com.example.mobile.components.SearchBar
-import com.example.mobile.components.TopBar
-import com.example.mobile.navigation.MobileScreen
 
 @Preview
 @Composable

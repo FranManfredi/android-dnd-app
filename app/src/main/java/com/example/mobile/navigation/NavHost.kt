@@ -9,11 +9,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.mobile.pages.compendium.Compendium
-import com.example.mobile.pages.creator.Creator
-import com.example.mobile.pages.home.Home
-import com.example.mobile.pages.items.Items
-import com.example.mobile.pages.settings.Settings
+import com.example.mobile.screen.compendium.Compendium
+import com.example.mobile.screen.creator.Creator
+import com.example.mobile.screen.home.Home
+import com.example.mobile.screen.items.Items
+import com.example.mobile.screen.settings.Settings
 
 
 @Composable

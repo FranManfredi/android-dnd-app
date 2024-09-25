@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
 
                                 val topBarType = when (it) {
                                     "Creator" -> TOPBAR_TYPES.CREATOR
+                                    "Weapons", "Spells", "Items", "Armor", "Classes", "Races" -> TOPBAR_TYPES.COMPENDIUM
                                     else -> TOPBAR_TYPES.NORMAL
                                 }
 
@@ -68,6 +69,14 @@ class MainActivity : ComponentActivity() {
                                     }},
                                     onNavigateToHome = {
                                         navController.navigate(MobileScreen.Home.name){
+                                            popUpTo(navController.graph.startDestinationId) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }},
+                                    onNavigateToCompendium = {
+                                        navController.navigate(MobileScreen.Compendium.name){
                                             popUpTo(navController.graph.startDestinationId) {
                                                 saveState = true
                                             }

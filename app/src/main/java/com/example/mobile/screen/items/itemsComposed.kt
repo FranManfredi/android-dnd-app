@@ -1,4 +1,4 @@
-package com.example.mobile.pages.items
+package com.example.mobile.screen.items
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
