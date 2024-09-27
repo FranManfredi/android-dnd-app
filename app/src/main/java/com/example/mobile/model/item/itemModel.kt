@@ -4,6 +4,6 @@ data class Items (
     val name: String,
     val type: String,
     val charges: String,
-    val description: String,
-    val recharge: String
+    val recharge: String,
+    val description: String
 )

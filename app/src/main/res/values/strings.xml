@@ -10,5 +10,5 @@
     <string name="classes">Classes</string>
     <string name="races">Races</string>
 
-    <string name="base_url">https://retoolapi.dev</string>
+    <string name="base_url">http://retoolapi.dev/</string>
 </resources>

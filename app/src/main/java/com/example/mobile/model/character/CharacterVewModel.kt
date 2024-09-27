@@ -28,32 +28,10 @@ class CharacterViewModel @Inject constructor(
                       background: String,
                       traits: Array<Trait>) {
 
-        val hp = calculateCharHp(characterClasses, baseStats.con)
-
-        val character = Character(name, race, characterClasses, baseStats, proficiency, background, traits, hp)
+        val character = Character(name, race, characterClasses, baseStats, proficiency, background, traits, hp = null)
         val newList = _characterList.value + character
         viewModelScope.launch {
             _characterList.emit(newList)
         }
-    }
-
-    private fun calculateCharHp(
-        characterClasses: Array<CharacterClass>,
-        constitution: Int
-    ): CharacterHp {
-
-        var total: Int = (constitution - 10)/2
-
-        for (c in characterClasses) {
-            api.getHitDie(
-                c.name,
-                context = context,
-                onSuccess = { total += it * c.level },
-                loadingFinished = { },
-                onFail = { total += 1 * c.level }
-            )
-        }
-
-        return CharacterHp(total)
     }
 }

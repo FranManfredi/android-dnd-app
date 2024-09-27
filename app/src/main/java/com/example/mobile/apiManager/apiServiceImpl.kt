@@ -1,6 +1,7 @@
 package com.example.mobile.apiManager
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.example.mobile.R
 import com.example.mobile.model.item.Items
@@ -13,40 +14,7 @@ import javax.inject.Inject
 
 class ApiServiceImpl @Inject constructor() {
 
-    fun getHitDie(className: String, context: Context, onSuccess: (Int) -> Unit, onFail: () -> Unit, loadingFinished: () -> Unit) {
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl(
-                context.getString(R.string.base_url)
-            )
-            .addConverterFactory(
-                GsonConverterFactory.create()
-            )
-            .build()
-
-        val service: ApiService = retrofit.create(ApiService::class.java)
-
-        val call: Call<Int> = service.getHitDice(className)
-
-        call.enqueue(object : Callback<Int> {
-            override fun onResponse(response: Response<Int>?, retrofit: Retrofit?) {
-                loadingFinished()
-                if(response?.isSuccess == true) {
-                    val hit_die: Int = response.body()
-                    onSuccess(hit_die)
-                } else {
-                    onFailure(Exception("Bad request"))
-                }
-            }
-
-            override fun onFailure(t: Throwable?) {
-                Toast.makeText(context, "Can't get hit dice", Toast.LENGTH_SHORT).show()
-                onFail()
-                loadingFinished()
-            }
-        })
-    }
-
-    fun getItems(className: String, context: Context, onSuccess: (List<Items>) -> Unit, onFail: () -> Unit, loadingFinished: () -> Unit) {
+    fun getItems(context: Context, onSuccess: (List<Items>) -> Unit, onFail: () -> Unit, loadingFinished: () -> Unit) {
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl(context.getString(R.string.base_url))
             .addConverterFactory(GsonConverterFactory.create())
@@ -61,7 +29,7 @@ class ApiServiceImpl @Inject constructor() {
             override fun onResponse(response: Response<List<Items>>?, retrofit: Retrofit?) {
                 loadingFinished()
                 if (response?.isSuccess == true) {
-                    val itemsList: List<Items> = response.body() ?: emptyList()
+                    val itemsList = response.body()
                     onSuccess(itemsList)
                 } else {
                     onFail()
@@ -69,6 +37,7 @@ class ApiServiceImpl @Inject constructor() {
             }
 
             override fun onFailure(t: Throwable?) {
+                Log.e("API", t?.message!!)
                 loadingFinished()
                 onFail()
             }

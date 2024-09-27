@@ -1,5 +1,6 @@
 package com.example.mobile.screen.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -19,7 +20,6 @@ fun PreviewHome() {
 
 @Composable
 fun Home() {
-
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
