@@ -1,5 +1,6 @@
 package com.example.mobile.apiManager
 
+import com.example.mobile.data.Item
 import com.example.mobile.model.item.Items
 import com.example.mobile.model.weapon.Weapons
 import retrofit.Call
@@ -9,7 +10,7 @@ import retrofit.http.Path
 interface ApiService {
 
     @GET("TgOBxi/items")
-    fun getItems(): Call<List<Items>>
+    fun getItems(): Call<List<Item>>
 
     @GET("83gZrQ/weapons")
     fun getWeapons(): Call<List<Weapons>>

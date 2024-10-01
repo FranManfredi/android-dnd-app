@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.mobile.R
+import com.example.mobile.data.Item
 import com.example.mobile.model.item.Items
 import com.example.mobile.model.weapon.Weapons
 import retrofit.Call
@@ -15,7 +16,7 @@ import javax.inject.Inject
 
 class ApiServiceImpl @Inject constructor() {
 
-    fun getItems(context: Context, onSuccess: (List<Items>) -> Unit, onFail: () -> Unit, loadingFinished: () -> Unit) {
+    fun getItems(context: Context, onSuccess: (List<Item>) -> Unit, onFail: () -> Unit, loadingFinished: () -> Unit) {
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl(context.getString(R.string.base_url))
             .addConverterFactory(GsonConverterFactory.create())
@@ -23,11 +24,11 @@ class ApiServiceImpl @Inject constructor() {
 
         val service: ApiService = retrofit.create(ApiService::class.java)
 
-        val call: Call<List<Items>> = service.getItems()
+        val call: Call<List<Item>> = service.getItems()
 
-        call.enqueue(object : Callback<List<Items>> {
+        call.enqueue(object : Callback<List<Item>> {
 
-            override fun onResponse(response: Response<List<Items>>?, retrofit: Retrofit?) {
+            override fun onResponse(response: Response<List<Item>>?, retrofit: Retrofit?) {
                 loadingFinished()
                 if (response?.isSuccess == true) {
                     val itemsList = response.body()

@@ -1,5 +1,6 @@
 package com.example.mobile.navigation
 
+import android.content.Context
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import com.example.mobile.screen.races.Races
 import com.example.mobile.screen.settings.Settings
 import com.example.mobile.screen.spells.Spells
 import com.example.mobile.screen.weapons.Weapons
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 
 @Composable
@@ -56,7 +58,7 @@ fun NavHostComposable(innerPadding: PaddingValues, navController: NavHostControl
             Races()
         }
         composable(route = MobileScreen.CompendiumCreator.name){
-            CompendiumCreator()
+            CompendiumCreator(navController)
         }
     }
 }

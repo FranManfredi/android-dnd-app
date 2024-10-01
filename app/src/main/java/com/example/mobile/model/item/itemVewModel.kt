@@ -23,14 +23,14 @@ class ItemViewModel @Inject constructor(
     private val dungeonsHelperDatabase = DungeonsHelperDatabase.getDatabase(context)
 
     // StateFlow for the list of items
-    private val _itemList = MutableStateFlow<List<Items>>(emptyList())
+    private val _itemList = MutableStateFlow<List<Item>>(emptyList())
     val itemList = _itemList.asStateFlow()
 
     init {
         // Fetch data asynchronously in a coroutine
         viewModelScope.launch(Dispatchers.IO) {
             val items = dungeonsHelperDatabase.itemsDao().getAllItems()
-            _itemList.value = items as List<Items>
+            _itemList.value = items
         }
     }
 
@@ -45,7 +45,7 @@ class ItemViewModel @Inject constructor(
         val updatedList = _itemList.value + newItem
         dungeonsHelperDatabase.itemsDao().insert(item = newItem)
         viewModelScope.launch {
-            _itemList.emit(updatedList as List<Items>)
+            _itemList.emit(updatedList)
         }
     }
 

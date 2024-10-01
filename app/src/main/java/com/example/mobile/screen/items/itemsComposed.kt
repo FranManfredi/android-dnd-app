@@ -25,8 +25,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.mobile.data.Item
 import com.example.mobile.model.item.ItemViewModel
-import com.example.mobile.model.item.Items
 import com.example.mobile.ui.theme.orange
 
 @Composable
@@ -58,7 +58,7 @@ fun Items(viewModel: ItemViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun ItemList(itemList: List<Items>) {
+fun ItemList(itemList: List<Item>) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -71,7 +71,7 @@ fun ItemList(itemList: List<Items>) {
 }
 
 @Composable
-fun ItemCard(item: Items) {
+fun ItemCard(item: Item) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
