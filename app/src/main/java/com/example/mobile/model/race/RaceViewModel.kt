@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,9 +22,14 @@ class RaceViewModel @Inject constructor(
 
     private val dungeonsHelperDatabase = DungeonsHelperDatabase.getDatabase(context)
 
-    // StateFlow for the list of races
     private val _raceList = MutableStateFlow<List<Race>>(emptyList())
     val raceList = _raceList.asStateFlow()
+
+    private var _loadingState = MutableStateFlow(false)
+    val loadingState = _loadingState.asStateFlow()
+
+    private var _errorState = MutableStateFlow<String?>(null)
+    val errorState = _errorState.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -34,36 +38,50 @@ class RaceViewModel @Inject constructor(
         }
     }
 
-    private var _loadingState = MutableStateFlow(false)
-    val loadingState = _loadingState.asStateFlow()
-
-    private var _errorState = MutableStateFlow<String?>(null)
-    val errorState = _errorState.asStateFlow()
-
-    suspend fun addRace(name: String, size: String, speed: Int, description: String, specialAbilities: String) {
+    suspend fun addRace(
+        name: String,
+        size: String,
+        speed: Int,
+        description: String,
+        specialAbilities: String
+    ) {
         val newRace = Race(name, size, speed, description, specialAbilities)
 
-        // Insert race on the IO dispatcher to avoid blocking the main thread
-        withContext(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            // Insert race into the database
             dungeonsHelperDatabase.raceDao().insert(newRace)
-        }
 
-        // Emit the updated list to the StateFlow
-        val updatedList = _raceList.value + newRace
-        _raceList.emit(updatedList)
+            // Fetch and emit the updated list
+            val updatedList = dungeonsHelperDatabase.raceDao().getAll()
+            _raceList.emit(updatedList)
+        }
     }
 
-    // Fetch races from API and update the race list
+    // Fetch races from API and update the list
     fun getRaces() {
         _loadingState.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val races = dungeonsHelperDatabase.raceDao().getAll()
+                _raceList.emit(races)
+                _loadingState.emit(false)
+            } catch (e: Exception) {
+                _loadingState.emit(false)
+                _errorState.emit("Failed to load races from database.")
+            }
+        }
+
+        // Optionally fetch from the API
         api.getRaces(
             context,
-            onSuccess = { fetchedRaces ->
-                viewModelScope.launch {
-                    val currentRaces = _raceList.value
-                    val updatedList = currentRaces + fetchedRaces.filterNot { fetchedRace ->
-                        currentRaces.any { it.name == fetchedRace.name }
+            onSuccess = { fetchedItems ->
+                viewModelScope.launch(Dispatchers.IO) {
+                    val currentItems = _raceList.value
+                    val newItems = fetchedItems.filterNot { fetchedItem ->
+                        currentItems.any { it.name == fetchedItem.name }
                     }
+                    newItems.forEach { dungeonsHelperDatabase.raceDao().insert(it) }
+                    val updatedList = dungeonsHelperDatabase.raceDao().getAll()
                     _raceList.emit(updatedList)
                     _loadingState.emit(false)
                 }

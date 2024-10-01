@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,16 +22,8 @@ class CharClassViewModel @Inject constructor(
 
     private val dungeonsHelperDatabase = DungeonsHelperDatabase.getDatabase(context)
 
-    // StateFlow for the list of character classes
     private val _classList = MutableStateFlow<List<CharClass>>(emptyList())
     val classList = _classList.asStateFlow()
-
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            val classes = dungeonsHelperDatabase.charClassDao().getAll()
-            _classList.value = classes
-        }
-    }
 
     private var _loadingState = MutableStateFlow(false)
     val loadingState = _loadingState.asStateFlow()
@@ -40,29 +31,57 @@ class CharClassViewModel @Inject constructor(
     private var _errorState = MutableStateFlow<String?>(null)
     val errorState = _errorState.asStateFlow()
 
-    suspend fun addClass(name: String, hitDie: String, description: String, savingThrows: String, primaryAbility: String) {
-        val newClass = CharClass(name, hitDie, description, savingThrows, primaryAbility)
-
-        // Insert class on the IO dispatcher to avoid blocking the main thread
-        withContext(Dispatchers.IO) {
-            dungeonsHelperDatabase.charClassDao().insert(newClass)
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            val charClasses = dungeonsHelperDatabase.charClassDao().getAll()
+            _classList.value = charClasses
         }
-
-        // Emit the updated list to the StateFlow
-        val updatedList = _classList.value + newClass
-        _classList.emit(updatedList)
     }
 
+    suspend fun addClass(
+        name: String,
+        hitDie: String,
+        description: String,
+        savingThrows: String,
+        primaryAbility: String
+    ) {
+        val newClass = CharClass(name, hitDie, description, savingThrows, primaryAbility)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            // Insert class into the database
+            dungeonsHelperDatabase.charClassDao().insert(newClass)
+
+            // Fetch and emit the updated list
+            val updatedList = dungeonsHelperDatabase.charClassDao().getAll()
+            _classList.emit(updatedList)
+        }
+    }
+
+    // Fetch classes from API and update the list
     fun getClasses() {
         _loadingState.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val charClasses = dungeonsHelperDatabase.charClassDao().getAll()
+                _classList.emit(charClasses)
+                _loadingState.emit(false)
+            } catch (e: Exception) {
+                _loadingState.emit(false)
+                _errorState.emit("Failed to load classes from database.")
+            }
+        }
+
+        // Optionally fetch from the API
         api.getClasses(
             context,
-            onSuccess = { fetchedClasses ->
-                viewModelScope.launch {
-                    val currentClasses = _classList.value
-                    val updatedList = currentClasses + fetchedClasses.filterNot { fetchedClass ->
-                        currentClasses.any { it.name == fetchedClass.name }
+            onSuccess = { fetchedItems ->
+                viewModelScope.launch(Dispatchers.IO) {
+                    val currentItems = _classList.value
+                    val newItems = fetchedItems.filterNot { fetchedItem ->
+                        currentItems.any { it.name == fetchedItem.name }
                     }
+                    newItems.forEach { dungeonsHelperDatabase.charClassDao().insert(it) }
+                    val updatedList = dungeonsHelperDatabase.charClassDao().getAll()
                     _classList.emit(updatedList)
                     _loadingState.emit(false)
                 }
@@ -70,7 +89,7 @@ class CharClassViewModel @Inject constructor(
             onFail = {
                 viewModelScope.launch {
                     _loadingState.emit(false)
-                    _errorState.emit("Failed to fetch character classes.")
+                    _errorState.emit("Failed to fetch classes.")
                 }
             },
             loadingFinished = {

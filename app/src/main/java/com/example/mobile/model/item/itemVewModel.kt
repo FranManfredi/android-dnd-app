@@ -22,17 +22,8 @@ class ItemViewModel @Inject constructor(
 
     private val dungeonsHelperDatabase = DungeonsHelperDatabase.getDatabase(context)
 
-    // StateFlow for the list of items
     private val _itemList = MutableStateFlow<List<Item>>(emptyList())
     val itemList = _itemList.asStateFlow()
-
-    init {
-        // Fetch data asynchronously in a coroutine
-        viewModelScope.launch(Dispatchers.IO) {
-            val items = dungeonsHelperDatabase.itemsDao().getAllItems()
-            _itemList.value = items
-        }
-    }
 
     private var _loadingState = MutableStateFlow(false)
     val loadingState = _loadingState.asStateFlow()
@@ -40,28 +31,59 @@ class ItemViewModel @Inject constructor(
     private var _errorState = MutableStateFlow<String?>(null)
     val errorState = _errorState.asStateFlow()
 
-    suspend fun addItem(name: String, type: String, charges: String, description: String, recharge: String) {
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            val items = dungeonsHelperDatabase.itemsDao().getAllItems()
+            _itemList.value = items
+        }
+    }
+
+    suspend fun addItem(
+        name: String,
+        type: String,
+        charges: String,
+        description: String,
+        recharge: String
+    ) {
         val newItem = Item(name, type, charges, description, recharge)
-        val updatedList = _itemList.value + newItem
-        dungeonsHelperDatabase.itemsDao().insert(item = newItem)
-        viewModelScope.launch {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            // Insert item into the database
+            dungeonsHelperDatabase.itemsDao().insert(newItem)
+
+            // Fetch and emit the updated list
+            val updatedList = dungeonsHelperDatabase.itemsDao().getAllItems()
             _itemList.emit(updatedList)
         }
     }
 
     // Fetch items from API and update the item list
     fun getItems() {
-        _loadingState.value = true // Set loading state to true
+        _loadingState.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val items = dungeonsHelperDatabase.itemsDao().getAllItems()
+                _itemList.emit(items)
+                _loadingState.emit(false)
+            } catch (e: Exception) {
+                _loadingState.emit(false)
+                _errorState.emit("Failed to load items from database.")
+            }
+        }
+
+        // Optionally fetch from the API
         api.getItems(
             context,
             onSuccess = { fetchedItems ->
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     val currentItems = _itemList.value
-                    val updatedList = currentItems + fetchedItems.filterNot { fetchedItem ->
-                        currentItems.any { it.name == fetchedItem.name } // Ensure no duplicates
+                    val newItems = fetchedItems.filterNot { fetchedItem ->
+                        currentItems.any { it.name == fetchedItem.name }
                     }
+                    newItems.forEach { dungeonsHelperDatabase.itemsDao().insert(it) }
+                    val updatedList = dungeonsHelperDatabase.itemsDao().getAllItems()
                     _itemList.emit(updatedList)
-                    _loadingState.emit(false) // Stop loading
+                    _loadingState.emit(false)
                 }
             },
             onFail = {
