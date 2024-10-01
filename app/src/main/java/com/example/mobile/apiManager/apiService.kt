@@ -1,11 +1,12 @@
 package com.example.mobile.apiManager
 
+import com.example.mobile.data.CharClass
 import com.example.mobile.data.Item
-import com.example.mobile.model.item.Items
-import com.example.mobile.model.weapon.Weapons
+import com.example.mobile.data.Race
+import com.example.mobile.data.Spell
+import com.example.mobile.data.Weapon
 import retrofit.Call
 import retrofit.http.GET
-import retrofit.http.Path
 
 interface ApiService {
 
@@ -13,14 +14,14 @@ interface ApiService {
     fun getItems(): Call<List<Item>>
 
     @GET("83gZrQ/weapons")
-    fun getWeapons(): Call<List<Weapons>>
+    fun getWeapons(): Call<List<Weapon>>
 
-//    @GET("sRkIr1/spells")
-//    fun getSpells(): Call<List<Spells>>
-//
-//    @GET("/nHJ2Vq/races")
-//    fun getRaces(): Call<List<Races>>
-//
-//    @GET("/ErlEB/classes")
-//    fun getClasses(): Call<List<Classes>>
+    @GET("sRklr1/spells")
+    fun getSpells(): Call<List<Spell>>
+
+    @GET("/nHJ2Vq/races")
+    fun getRaces(): Call<List<Race>>
+
+    @GET("/Erl1EB/classes")
+    fun getClasses(): Call<List<CharClass>>
 }

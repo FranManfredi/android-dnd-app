@@ -13,4 +13,57 @@
     <string name="base_url">http://retoolapi.dev/</string>
     <string name="add">add</string>
     <string name="addCompendium">Add to compendium</string>
+
+    <string name="weapon_damage">Damage</string>
+    <string name="weapon_to_hit">To Hit</string>
+    <string name="weapon_damage_type">Damage Type</string>
+    <string name="weapon_description">Description</string>
+
+    <string name="spell_level">Level</string>
+    <string name="spell_casting_time">Casting Time</string>
+    <string name="spell_description">Description</string>
+
+    <string name="item_type">Type</string>
+    <string name="item_charges">Charges</string>
+    <string name="item_recharge">Recharge</string>
+    <string name="item_description">Description</string>
+
+    <string name="class_hit_die">Hit Die</string>
+    <string name="class_primary_ability">Primary Ability</string>
+    <string name="class_description">Description</string>
+
+    <string name="race_size">Size</string>
+    <string name="race_speed">Speed</string>
+    <string name="race_description">Description</string>
+
+
+    <!-- Item Form -->
+    <string name="create_custom_item">Create a Custom Item</string>
+    <string name="item_name">Item Name</string>
+    <string name="submit_item">Submit Item</string>
+
+    <!-- Class Form -->
+    <string name="create_custom_class">Create a Custom Class</string>
+    <string name="class_name">Class Name</string>
+    <string name="class_saving_throws">Saving Throws</string>
+    <string name="submit_class">Submit Class</string>
+
+    <!-- Race Form -->
+    <string name="create_custom_race">Create a Custom Race</string>
+    <string name="race_name">Race Name</string>
+    <string name="race_special_abilities">Special Abilities</string>
+    <string name="submit_race">Submit Race</string>
+
+    <!-- Spell Form -->
+    <string name="create_custom_spell">Create a Custom Spell</string>
+    <string name="spell_name">Spell Name</string>
+    <string name="spell_damage">Spell Damage</string>
+    <string name="spell_damage_type">Damage Type</string>
+    <string name="submit_spell">Submit Spell</string>
+
+
+    <string name="create_weapon">Create a Custom Weapon</string>
+    <string name="weapon_name">Weapon Name</string>
+    <string name="weapon_image_url">Image Url</string>
+    <string name="submit_weapon">Submit Weapon</string>
 </resources>

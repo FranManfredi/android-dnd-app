@@ -28,6 +28,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mobile.data.Item
 import com.example.mobile.model.item.ItemViewModel
 import com.example.mobile.ui.theme.orange
+import androidx.compose.ui.res.stringResource
+import com.example.mobile.R
 
 @Composable
 fun Items(viewModel: ItemViewModel = hiltViewModel()) {
@@ -99,12 +101,12 @@ fun ItemCard(item: Item) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Type: ${item.type}",
+                    text = "${stringResource(id = R.string.item_type)}: ${item.type}",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Charges: ${item.charges}",
+                    text = "${stringResource(id = R.string.item_charges)}: ${item.charges}",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -114,7 +116,7 @@ fun ItemCard(item: Item) {
 
             // Description
             Text(
-                text = item.description,
+                text = "${stringResource(id = R.string.item_description)}: ${item.description}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -123,7 +125,7 @@ fun ItemCard(item: Item) {
             if (item.recharge.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Recharge: ${item.recharge}",
+                    text = "${stringResource(id = R.string.item_recharge)}: ${item.recharge}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.secondary
                 )

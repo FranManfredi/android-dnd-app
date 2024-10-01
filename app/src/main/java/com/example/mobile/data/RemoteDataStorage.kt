@@ -5,9 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Item::class], version = 1)
+@Database(entities = [Item::class, Weapon::class, Spell::class, Race::class, CharClass::class], version = 2)
 abstract class DungeonsHelperDatabase : RoomDatabase() {
+    abstract fun weaponDao(): WeaponDao
+    abstract fun spellDao(): SpellDao
     abstract fun itemsDao(): ItemsDao
+    abstract fun charClassDao(): CharClassDao
+    abstract fun raceDao(): RaceDao
+
+
     companion object {
         @Volatile
         private var INSTANCE: DungeonsHelperDatabase? = null
@@ -17,7 +23,9 @@ abstract class DungeonsHelperDatabase : RoomDatabase() {
                     context.applicationContext,
                     DungeonsHelperDatabase::class.java,
                     "Dungeons_Helper_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }

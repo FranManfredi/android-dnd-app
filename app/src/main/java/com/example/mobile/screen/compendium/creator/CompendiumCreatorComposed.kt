@@ -28,6 +28,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.mobile.components.forms.CharClassForm
+import com.example.mobile.components.forms.ItemForm
+import com.example.mobile.components.forms.RaceForm
+import com.example.mobile.components.forms.SpellForm
+import com.example.mobile.components.forms.WeaponForm
 import com.example.mobile.data.DungeonsHelperDatabase
 import com.example.mobile.data.Item
 import com.example.mobile.model.item.ItemViewModel
@@ -61,152 +66,10 @@ fun CompendiumCreator(nav: NavHostController) {
         // Show the appropriate form based on the selection
         when (selectedForm) {
             "Item" -> ItemForm(nav)
-            "Weapon" -> WeaponForm()
-            "Spell" -> SpellForm()
-            "Class" -> ClassForm()
-            "Race" -> RaceForm()
-        }
-    }
-}
-
-@Composable
-fun ItemForm(nav: NavHostController, viewModel: ItemViewModel = hiltViewModel()) {
-    var itemName by remember { mutableStateOf("") }
-    var itemType by remember { mutableStateOf("") }
-    var itemCharges by remember { mutableStateOf("") }
-    var itemRecharge by remember { mutableStateOf("") }
-    var itemDescription by remember { mutableStateOf("") }
-
-    val coroutineScope = rememberCoroutineScope()
-
-    Column {
-        Text("Create a Custom Item", style = MaterialTheme.typography.headlineLarge)
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Item Name TextField
-        OutlinedTextField(
-            value = itemName,
-            onValueChange = { itemName = it },
-            label = { Text("Item Name") }
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Item Type TextField
-        OutlinedTextField(
-            value = itemType,
-            onValueChange = { itemType = it },
-            label = { Text("Item Type") }
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Item Charges TextField
-        OutlinedTextField(
-            value = itemCharges,
-            onValueChange = { itemCharges = it },
-            label = { Text("Item Charges") }
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Item Recharge TextField
-        OutlinedTextField(
-            value = itemRecharge,
-            onValueChange = { itemRecharge = it },
-            label = { Text("Item Recharge") }
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Item Description TextField
-        OutlinedTextField(
-            value = itemDescription,
-            onValueChange = { itemDescription = it },
-            label = { Text("Item Description") }
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Submit button
-        Button(onClick = {
-            coroutineScope.launch {
-                // Insert the item via the ItemViewModel
-                viewModel.addItem(
-                    name = itemName,
-                    type = itemType,
-                    charges = itemCharges,
-                    recharge = itemRecharge,
-                    description = itemDescription
-                )
-                // Optionally navigate back after submission
-                nav.popBackStack()
-            }
-        }) {
-            Text("Submit Item")
-        }
-    }
-}
-
-@Composable
-fun WeaponForm() {
-    // Custom weapon form elements
-    Column {
-        Text("Create a Custom Weapon", style = MaterialTheme.typography.headlineLarge)
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(value = "", onValueChange = {}, label = { Text("Weapon Name") })
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(value = "", onValueChange = {}, label = { Text("Weapon Type") })
-        Spacer(modifier = Modifier.height(8.dp))
-        // Add more fields as needed for Weapon
-        Button(onClick = { /* Handle submit */ }) {
-            Text("Submit Weapon")
-        }
-    }
-}
-
-@Composable
-fun SpellForm() {
-    // Custom spell form elements
-    Column {
-        Text("Create a Custom Spell", style = MaterialTheme.typography.headlineLarge)
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(value = "", onValueChange = {}, label = { Text("Spell Name") })
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(value = "", onValueChange = {}, label = { Text("Spell Description") })
-        Spacer(modifier = Modifier.height(8.dp))
-        // Add more fields as needed for Spell
-        Button(onClick = { /* Handle submit */ }) {
-            Text("Submit Spell")
-        }
-    }
-}
-
-@Composable
-fun ClassForm() {
-    // Custom class form elements
-    Column {
-        Text("Create a Custom Class", style = MaterialTheme.typography.headlineLarge)
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(value = "", onValueChange = {}, label = { Text("Class Name") })
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(value = "", onValueChange = {}, label = { Text("Class Abilities") })
-        Spacer(modifier = Modifier.height(8.dp))
-        // Add more fields as needed for Class
-        Button(onClick = { /* Handle submit */ }) {
-            Text("Submit Class")
-        }
-    }
-}
-
-@Composable
-fun RaceForm() {
-    // Custom race form elements
-    Column {
-        Text("Create a Custom Race", style = MaterialTheme.typography.headlineLarge)
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(value = "", onValueChange = {}, label = { Text("Race Name") })
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(value = "", onValueChange = {}, label = { Text("Race Traits") })
-        Spacer(modifier = Modifier.height(8.dp))
-        // Add more fields as needed for Race
-        Button(onClick = { /* Handle submit */ }) {
-            Text("Submit Race")
+            "Weapon" -> WeaponForm(nav)
+            "Spell" -> SpellForm(nav)
+            "Class" -> CharClassForm(nav)
+            "Race" -> RaceForm(nav)
         }
     }
 }

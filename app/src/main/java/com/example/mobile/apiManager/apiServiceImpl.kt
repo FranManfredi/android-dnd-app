@@ -2,11 +2,12 @@ package com.example.mobile.apiManager
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import com.example.mobile.R
+import com.example.mobile.data.CharClass
 import com.example.mobile.data.Item
-import com.example.mobile.model.item.Items
-import com.example.mobile.model.weapon.Weapons
+import com.example.mobile.data.Race
+import com.example.mobile.data.Spell
+import com.example.mobile.data.Weapon
 import retrofit.Call
 import retrofit.Callback
 import retrofit.GsonConverterFactory
@@ -15,6 +16,37 @@ import retrofit.Retrofit
 import javax.inject.Inject
 
 class ApiServiceImpl @Inject constructor() {
+
+    inline fun <reified T> fetchFromApi(
+        context: Context,
+        apiCall: Call<List<T>>,
+        crossinline onSuccess: (List<T>) -> Unit,
+        crossinline onFail: () -> Unit,
+        crossinline loadingFinished: () -> Unit
+    ) {
+        apiCall.enqueue(object : Callback<List<T>> {
+            override fun onResponse(response: Response<List<T>>?, retrofit: Retrofit?) {
+                loadingFinished()
+                if (response != null) {
+                    if (response.isSuccess && response.body() != null) {
+                        if (response != null) {
+                            onSuccess(response.body()!!)
+                        }
+                    } else {
+                        onFail()
+                    }
+                }
+            }
+
+            override fun onFailure(t: Throwable?) {
+                if (t != null) {
+                    Log.e("API", t.message ?: "Unknown error")
+                }
+                loadingFinished()
+                onFail()
+            }
+        })
+    }
 
     fun getItems(context: Context, onSuccess: (List<Item>) -> Unit, onFail: () -> Unit, loadingFinished: () -> Unit) {
         val retrofit: Retrofit = Retrofit.Builder()
@@ -46,7 +78,7 @@ class ApiServiceImpl @Inject constructor() {
         })
     }
 
-    fun getWeapons(context: Context, onSuccess: (List<Weapons>) -> Unit, onFail: () -> Unit, loadingFinished: () -> Unit) {
+    fun getWeapons(context: Context, onSuccess: (List<Weapon>) -> Unit, onFail: () -> Unit, loadingFinished: () -> Unit) {
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl(context.getString(R.string.base_url))
             .addConverterFactory(GsonConverterFactory.create())
@@ -54,10 +86,10 @@ class ApiServiceImpl @Inject constructor() {
 
         val service: ApiService = retrofit.create(ApiService::class.java)
 
-        val call: Call<List<Weapons>> = service.getWeapons()
+        val call: Call<List<Weapon>> = service.getWeapons()
 
-        call.enqueue(object : Callback<List<Weapons>> {
-            override fun onResponse(response: Response<List<Weapons>>?, retrofit: Retrofit?) {
+        call.enqueue(object : Callback<List<Weapon>> {
+            override fun onResponse(response: Response<List<Weapon>>?, retrofit: Retrofit?) {
                 loadingFinished()
                 if (response?.isSuccess == true) {
                     val weaponsList = response.body()
@@ -71,6 +103,45 @@ class ApiServiceImpl @Inject constructor() {
                 loadingFinished()
                 onFail()            }
         })
+    }
+
+    fun getClasses(context: Context, onSuccess: (List<CharClass>) -> Unit, onFail: () -> Unit, loadingFinished: () -> Unit) {
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl(context.getString(R.string.base_url))
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service: ApiService = retrofit.create(ApiService::class.java)
+
+        val call: Call<List<CharClass>> = service.getClasses()
+
+        fetchFromApi(context, call, onSuccess, onFail, loadingFinished)
+    }
+
+    fun getRaces(context: Context, onSuccess: (List<Race>) -> Unit, onFail: () -> Unit, loadingFinished: () -> Unit) {
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl(context.getString(R.string.base_url))
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service: ApiService = retrofit.create(ApiService::class.java)
+
+        val call: Call<List<Race>> = service.getRaces()
+
+        fetchFromApi(context, call, onSuccess, onFail, loadingFinished)
+    }
+
+    fun getSpells(context: Context, onSuccess: (List<Spell>) -> Unit, onFail: () -> Unit, loadingFinished: () -> Unit) {
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl(context.getString(R.string.base_url))
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service: ApiService = retrofit.create(ApiService::class.java)
+
+        val call: Call<List<Spell>> = service.getSpells()
+
+        fetchFromApi(context, call, onSuccess, onFail, loadingFinished)
     }
 
 
