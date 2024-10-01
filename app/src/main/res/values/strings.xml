@@ -11,4 +11,6 @@
     <string name="races">Races</string>
 
     <string name="base_url">http://retoolapi.dev/</string>
+    <string name="add">add</string>
+    <string name="addCompendium">Add to compendium</string>
 </resources>

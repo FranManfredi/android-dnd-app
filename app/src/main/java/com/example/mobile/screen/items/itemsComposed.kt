@@ -1,6 +1,5 @@
 package com.example.mobile.screen.items
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,7 +42,7 @@ fun Items(viewModel: ItemViewModel = hiltViewModel()) {
     }
 
     // Show loading spinner if loading
-    if (loadingState) {
+    if (loadingState && itemList.isEmpty()) {
         CircularProgressIndicator()
     }
 
@@ -63,7 +62,6 @@ fun ItemList(itemList: List<Items>) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
     ) {
         items(itemList) { item ->
             ItemCard(item)

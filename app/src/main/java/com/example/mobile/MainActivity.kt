@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
                                 val topBarType = when (it) {
                                     "Creator" -> TOPBAR_TYPES.CREATOR
-                                    "Weapons", "Spells", "Items", "Armor", "Classes", "Races" -> TOPBAR_TYPES.COMPENDIUM
+                                    "Weapons", "Spells", "Items", "Armor", "Classes", "Races", "CompendiumCreator" -> TOPBAR_TYPES.COMPENDIUM
                                     else -> TOPBAR_TYPES.NORMAL
                                 }
 

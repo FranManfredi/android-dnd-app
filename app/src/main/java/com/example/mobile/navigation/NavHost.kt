@@ -9,9 +9,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.mobile.screen.armors.Armor
 import com.example.mobile.screen.classes.Classes
 import com.example.mobile.screen.compendium.Compendium
+import com.example.mobile.screen.compendium.creator.CompendiumCreator
 import com.example.mobile.screen.creator.Creator
 import com.example.mobile.screen.home.Home
 import com.example.mobile.screen.items.Items
@@ -46,9 +46,6 @@ fun NavHostComposable(innerPadding: PaddingValues, navController: NavHostControl
         composable(route = MobileScreen.Spells.name){
             Spells()
         }
-        composable(route = MobileScreen.Armour.name){
-            Armor()
-        }
         composable(route = MobileScreen.Items.name){
             Items()
         }
@@ -57,6 +54,9 @@ fun NavHostComposable(innerPadding: PaddingValues, navController: NavHostControl
         }
         composable(route = MobileScreen.Races.name){
             Races()
+        }
+        composable(route = MobileScreen.CompendiumCreator.name){
+            CompendiumCreator()
         }
     }
 }

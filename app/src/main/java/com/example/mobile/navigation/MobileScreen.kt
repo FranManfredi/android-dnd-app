@@ -9,7 +9,8 @@ enum class MobileScreen {
     Races,
     Items,
     Classes,
-    Armour,
+
+    CompendiumCreator,
 
     Creator,
 

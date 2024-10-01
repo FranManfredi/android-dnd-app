@@ -1,12 +1,14 @@
 package com.example.mobile.model.item
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mobile.apiManager.ApiServiceImpl
+import com.example.mobile.data.DungeonsHelperDatabase
+import com.example.mobile.data.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -18,8 +20,19 @@ class ItemViewModel @Inject constructor(
     private val api: ApiServiceImpl // Injected via Hilt
 ) : ViewModel() {
 
-    private var _itemList = MutableStateFlow<List<Items>>(emptyList())
+    private val dungeonsHelperDatabase = DungeonsHelperDatabase.getDatabase(context)
+
+    // StateFlow for the list of items
+    private val _itemList = MutableStateFlow<List<Items>>(emptyList())
     val itemList = _itemList.asStateFlow()
+
+    init {
+        // Fetch data asynchronously in a coroutine
+        viewModelScope.launch(Dispatchers.IO) {
+            val items = dungeonsHelperDatabase.itemsDao().getAllItems()
+            _itemList.value = items as List<Items>
+        }
+    }
 
     private var _loadingState = MutableStateFlow(false)
     val loadingState = _loadingState.asStateFlow()
@@ -27,12 +40,12 @@ class ItemViewModel @Inject constructor(
     private var _errorState = MutableStateFlow<String?>(null)
     val errorState = _errorState.asStateFlow()
 
-    // Function to add an item manually
-    fun addItem(name: String, type: String, charges: String, description: String, recharge: String) {
-        val newItem = Items(name, type, charges, description, recharge)
+    suspend fun addItem(name: String, type: String, charges: String, description: String, recharge: String) {
+        val newItem = Item(name, type, charges, description, recharge)
         val updatedList = _itemList.value + newItem
+        dungeonsHelperDatabase.itemsDao().insert(item = newItem)
         viewModelScope.launch {
-            _itemList.emit(updatedList)
+            _itemList.emit(updatedList as List<Items>)
         }
     }
 
@@ -42,9 +55,12 @@ class ItemViewModel @Inject constructor(
         api.getItems(
             context,
             onSuccess = { fetchedItems ->
-                Log.d("API", "testing onSuccess")
                 viewModelScope.launch {
-                    _itemList.emit(fetchedItems)
+                    val currentItems = _itemList.value
+                    val updatedList = currentItems + fetchedItems.filterNot { fetchedItem ->
+                        currentItems.any { it.name == fetchedItem.name } // Ensure no duplicates
+                    }
+                    _itemList.emit(updatedList)
                     _loadingState.emit(false) // Stop loading
                 }
             },

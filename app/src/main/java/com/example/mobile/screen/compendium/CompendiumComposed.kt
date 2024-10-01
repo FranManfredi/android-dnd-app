@@ -2,13 +2,20 @@ package com.example.mobile.screen.compendium
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -44,7 +51,6 @@ fun Compendium(navController: NavHostController) {
     val navigation: List<(NavHostController) -> Unit> = listOf(
         { navigateWithOptions(MobileScreen.Weapons.name) },  // Navigate to Weapons screen
         { navigateWithOptions(MobileScreen.Spells.name) },   // Navigate to Spells screen
-        { navigateWithOptions(MobileScreen.Armour.name) },   // Navigate to Armour screen
         { navigateWithOptions(MobileScreen.Items.name) },    // Navigate to Items screen
         { navigateWithOptions(MobileScreen.Classes.name) },  // Navigate to Classes screen
         { navigateWithOptions(MobileScreen.Races.name) }     // Navigate to Races screen
@@ -57,15 +63,22 @@ fun Compendium(navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(16.dp)
+                .fillMaxHeight(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            CircularPlusButton {
+                navigateWithOptions(MobileScreen.CompendiumCreator.name)
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
             // List of button labels
             val buttons = listOf(
                 R.string.weapons,
                 R.string.spells,
-                R.string.armors,
                 R.string.items,
                 R.string.classes,
                 R.string.races
@@ -74,12 +87,38 @@ fun Compendium(navController: NavHostController) {
             // Iterate over both the buttons and navigations simultaneously
             buttons.forEachIndexed { index, textId ->
                 CompendiumButton(text = stringResource(id = textId)) {
-                    // Invoke the corresponding lambda for navigation when the button is clicked
                     navigation[index](navController)
                 }
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
+    }
+}
+
+@Composable
+fun CircularPlusButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        shape = RoundedCornerShape(32.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .height(128.dp), // Size of the circular button
+        contentPadding = PaddingValues(0.dp), // Remove default padding to center the icon better
+        colors = ButtonDefaults.buttonColors(orange)
+        ) {
+        Icon(
+            imageVector = Icons.Default.Add, // The plus sign icon
+            contentDescription = stringResource(id = R.string.add),
+            tint = Color.White, // White color for the plus sign
+            modifier = Modifier.size(40.dp)
+        )
+        Text(
+            text = stringResource(id = R.string.addCompendium),
+            color = Color.White,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.SemiBold
+        )
     }
 }
 
