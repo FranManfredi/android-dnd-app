@@ -12,10 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mobile.R
 import com.example.mobile.ui.theme.orange
 
 @Composable
@@ -32,10 +33,19 @@ fun TopBar(
         verticalAlignment = Alignment.Bottom,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp)
+            .padding(
+                horizontal = dimensionResource(id = R.dimen.topbar_padding_horizontal),
+                vertical = dimensionResource(id = R.dimen.topbar_padding_vertical)
+            )
     ) {
         ButtonWithIcon(onNavigate = { onNavigateToSettings() }, icon = Icons.Filled.Settings)
-        Text(text = title, color = orange, style = TextStyle.Default, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(
+            text = title,
+            color = orange,
+            style = TextStyle.Default,
+            fontSize = dimensionResource(id = R.dimen.font_size_20sp).value.sp, // Use dimension for font size
+            fontWeight = FontWeight.Bold
+        )
         when (type) {
             TOPBAR_TYPES.CREATOR -> {
                 ButtonWithIcon(onNavigate = { onNavigateToHome() }, icon = Icons.AutoMirrored.Rounded.ArrowBack)
@@ -50,7 +60,7 @@ fun TopBar(
     }
 }
 
-enum class TOPBAR_TYPES{
+enum class TOPBAR_TYPES {
     NORMAL,
     CREATOR,
     COMPENDIUM

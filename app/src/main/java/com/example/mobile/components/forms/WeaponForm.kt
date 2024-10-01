@@ -15,8 +15,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.mobile.R
@@ -34,52 +35,59 @@ fun WeaponForm(nav: NavHostController, viewModel: WeaponViewModel = hiltViewMode
 
     val coroutineScope = rememberCoroutineScope()
 
-    LazyColumn(Modifier.padding(16.dp)) {
+    LazyColumn(
+        Modifier.padding(dimensionResource(id = R.dimen.padding_16dp)) // Use padding from dimens
+    ) {
         item {
-            Text(stringResource(id = R.string.create_weapon), style = MaterialTheme.typography.headlineLarge)
-            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(id = R.string.create_weapon),
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    fontSize = dimensionResource(id = R.dimen.headline_large_text_size).value.sp
+                )
+            )
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_8dp)))
 
             OutlinedTextField(
                 value = weaponName,
                 onValueChange = { weaponName = it },
                 label = { Text(stringResource(id = R.string.weapon_name)) }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_8dp)))
 
             OutlinedTextField(
                 value = weaponDamage,
                 onValueChange = { weaponDamage = it },
                 label = { Text(stringResource(id = R.string.weapon_damage)) }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_8dp)))
 
             OutlinedTextField(
                 value = weaponToHit,
                 onValueChange = { weaponToHit = it },
                 label = { Text(stringResource(id = R.string.weapon_to_hit)) }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_8dp)))
 
             OutlinedTextField(
                 value = weaponDamageType,
                 onValueChange = { weaponDamageType = it },
                 label = { Text(stringResource(id = R.string.weapon_damage_type)) }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_8dp)))
 
             OutlinedTextField(
                 value = weaponImageUrl,
                 onValueChange = { weaponImageUrl = it },
                 label = { Text(stringResource(id = R.string.weapon_image_url)) }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_8dp)))
 
             OutlinedTextField(
                 value = weaponDescription,
                 onValueChange = { weaponDescription = it },
                 label = { Text(stringResource(id = R.string.weapon_description)) }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_8dp)))
 
             Button(onClick = {
                 coroutineScope.launch {

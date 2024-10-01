@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_padding">8dp</dimen>
+    <dimen name="spacer_height">8dp</dimen>
+    <dimen name="column_padding">16dp</dimen>
+    <dimen name="card_corner_radius">8dp</dimen>
+
+    <dimen name="creator_padding">16dp</dimen>
+    <dimen name="dropdown_padding">16dp</dimen>
+    <dimen name="border_thickness">1dp</dimen>
+
+    <dimen name="compendium_padding">16dp</dimen>
+    <dimen name="button_height">128dp</dimen>
+    <dimen name="icon_size">40dp</dimen>
+    <dimen name="button_text_size">18sp</dimen>
+    <dimen name="spacer_height_large">32dp</dimen>
+    <dimen name="spacer_height_medium">16dp</dimen>
+
+    <dimen name="padding_8dp">8dp</dimen>
+    <dimen name="padding_16dp">16dp</dimen>
+    <dimen name="spacer_height_8dp">8dp</dimen>
+    <dimen name="card_corner_radius_8dp">8dp</dimen>
+
+    <dimen name="button_size_48dp">48dp</dimen>
+    <dimen name="icon_size_32dp">32dp</dimen>
+    <dimen name="padding_0dp">0dp</dimen>
+
+    <dimen name="search_bar_height">56dp</dimen>
+    <dimen name="search_bar_padding_start">4dp</dimen>
+    <dimen name="search_bar_padding_end">0dp</dimen>
+    <dimen name="corner_radius_8dp">8dp</dimen>
+    <dimen name="font_size_18sp">18sp</dimen>
+
+    <dimen name="topbar_padding_horizontal">24dp</dimen>
+    <dimen name="topbar_padding_vertical">8dp</dimen>
+    <dimen name="font_size_20sp">20sp</dimen>
+
+    <dimen name="spacing_8dp">8dp</dimen>
+    <dimen name="headline_large_text_size">24sp</dimen>
+
+
+</resources>

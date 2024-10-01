@@ -10,27 +10,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
 import com.example.mobile.ui.theme.orange
+import com.example.mobile.R
 
 @Composable
 fun ButtonWithIcon(
     onNavigate: () -> Unit,
     icon: ImageVector
-){
+) {
     Button(
         onClick = { onNavigate() },
-        colors = ButtonDefaults.buttonColors(Color.Transparent), // Sin color de fondo
-        shape = CircleShape, // Forma redonda
-        contentPadding = PaddingValues(0.dp), // Sin padding
-        elevation = null, // Sin sombra
-        modifier = Modifier.size(48.dp) // Ajusta el tamaño del botón
+        colors = ButtonDefaults.buttonColors(Color.Transparent), // No background color
+        shape = CircleShape, // Circular shape
+        contentPadding = PaddingValues(dimensionResource(id = R.dimen.padding_0dp)), // No padding
+        elevation = null, // No shadow
+        modifier = Modifier.size(dimensionResource(id = R.dimen.button_size_48dp)) // Button size
     ) {
         Icon(
             imageVector = icon,
             contentDescription = "Add",
             tint = orange,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(dimensionResource(id = R.dimen.icon_size_32dp)) // Icon size
         )
     }
 }

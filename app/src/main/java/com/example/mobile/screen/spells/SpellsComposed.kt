@@ -1,8 +1,5 @@
 package com.example.mobile.screen.spells
 
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,14 +8,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mobile.data.Spell
 import com.example.mobile.model.spell.SpellViewModel
@@ -61,7 +60,7 @@ fun SpellList(spellList: List<Spell>) {
     ) {
         items(spellList) { spell ->
             SpellCard(spell)
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacer_height_8dp)))
         }
     }
 }
@@ -71,13 +70,13 @@ fun SpellCard(spell: Spell) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        shape = RoundedCornerShape(8.dp)
+            .padding(dimensionResource(id = R.dimen.padding_8dp)),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.card_corner_radius_8dp))
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(dimensionResource(id = R.dimen.padding_16dp))
         ) {
             // Spell Name
             Text(
@@ -87,7 +86,7 @@ fun SpellCard(spell: Spell) {
                 color = orange
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacer_height_8dp)))
 
             // Spell Level and Casting Time
             Row(
@@ -106,7 +105,7 @@ fun SpellCard(spell: Spell) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacer_height_8dp)))
 
             // Description
             Text(

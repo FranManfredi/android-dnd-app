@@ -1,6 +1,5 @@
 package com.example.mobile.screen.compendium.creator
 
-import android.content.Context
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,34 +10,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.NavHostController
 import com.example.mobile.components.forms.CharClassForm
 import com.example.mobile.components.forms.ItemForm
 import com.example.mobile.components.forms.RaceForm
 import com.example.mobile.components.forms.SpellForm
 import com.example.mobile.components.forms.WeaponForm
-import com.example.mobile.data.DungeonsHelperDatabase
-import com.example.mobile.data.Item
-import com.example.mobile.model.item.ItemViewModel
 import com.example.mobile.ui.theme.orange
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.launch
+import com.example.mobile.R
 
 @Composable
 fun CompendiumCreator(nav: NavHostController) {
@@ -48,20 +37,20 @@ fun CompendiumCreator(nav: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(dimensionResource(id = R.dimen.creator_padding)), // Use dimen resource
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
         // Dropdown to select the form type
         Text(text = "Select the form type to create:", style = MaterialTheme.typography.headlineMedium)
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacer_height))) // Use dimen resource
 
         // Dropdown to select the form type
         DropdownMenu(selectedForm, formTypes) { newForm ->
             selectedForm = newForm // Update the selected form type
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.creator_padding))) // Use dimen resource
 
         // Show the appropriate form based on the selection
         when (selectedForm) {
@@ -87,9 +76,9 @@ fun DropdownMenu(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(1.dp, orange)
+                .border(dimensionResource(id = R.dimen.border_thickness), orange) // Use dimen resource
                 .clickable { expanded = !expanded }
-                .padding(16.dp)
+                .padding(dimensionResource(id = R.dimen.dropdown_padding)) // Use dimen resource
         ) {
             Text(text = selectedForm)
         }
@@ -99,7 +88,7 @@ fun DropdownMenu(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, orange)
+                    .border(dimensionResource(id = R.dimen.border_thickness), orange) // Use dimen resource
             ) {
                 formTypes.forEach { formType ->
                     Box(
@@ -109,7 +98,7 @@ fun DropdownMenu(
                                 onFormSelected(formType)
                                 expanded = false
                             }
-                            .padding(16.dp)
+                            .padding(dimensionResource(id = R.dimen.dropdown_padding)) // Use dimen resource
                     ) {
                         Text(text = formType)
                     }

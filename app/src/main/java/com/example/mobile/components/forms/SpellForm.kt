@@ -15,8 +15,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
@@ -34,10 +35,15 @@ fun SpellForm(nav: NavHostController, viewModel: SpellViewModel = hiltViewModel(
 
     val coroutineScope = rememberCoroutineScope()
 
-    LazyColumn(Modifier.padding(16.dp)) {
+    LazyColumn(
+        modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_16dp))
+    ) {
         item {
-            Text(stringResource(id = R.string.create_custom_spell), style = MaterialTheme.typography.headlineLarge)
-            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(id = R.string.create_custom_spell),
+                style = MaterialTheme.typography.headlineLarge.copy(fontSize = dimensionResource(id = R.dimen.headline_large_text_size).value.sp)
+            )
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_8dp)))
 
             // Spell Name
             OutlinedTextField(
@@ -45,7 +51,7 @@ fun SpellForm(nav: NavHostController, viewModel: SpellViewModel = hiltViewModel(
                 onValueChange = { spellName = it },
                 label = { Text(stringResource(id = R.string.spell_name)) }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_8dp)))
 
             // Spell Level
             OutlinedTextField(
@@ -53,7 +59,7 @@ fun SpellForm(nav: NavHostController, viewModel: SpellViewModel = hiltViewModel(
                 onValueChange = { spellLevel = it },
                 label = { Text(stringResource(id = R.string.spell_level)) }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_8dp)))
 
             // Spell Damage
             OutlinedTextField(
@@ -61,7 +67,7 @@ fun SpellForm(nav: NavHostController, viewModel: SpellViewModel = hiltViewModel(
                 onValueChange = { spellDamage = it },
                 label = { Text(stringResource(id = R.string.spell_damage)) }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_8dp)))
 
             // Damage Type
             OutlinedTextField(
@@ -69,7 +75,7 @@ fun SpellForm(nav: NavHostController, viewModel: SpellViewModel = hiltViewModel(
                 onValueChange = { damageType = it },
                 label = { Text(stringResource(id = R.string.spell_damage_type)) }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_8dp)))
 
             // Casting Time
             OutlinedTextField(
@@ -77,7 +83,7 @@ fun SpellForm(nav: NavHostController, viewModel: SpellViewModel = hiltViewModel(
                 onValueChange = { castingTime = it },
                 label = { Text(stringResource(id = R.string.spell_casting_time)) }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_8dp)))
 
             // Spell Description
             OutlinedTextField(
@@ -85,7 +91,7 @@ fun SpellForm(nav: NavHostController, viewModel: SpellViewModel = hiltViewModel(
                 onValueChange = { spellDescription = it },
                 label = { Text(stringResource(id = R.string.spell_description)) }
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacing_8dp)))
 
             // Submit button
             Button(onClick = {

@@ -23,8 +23,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mobile.R
 import com.example.mobile.data.CharClass
@@ -67,7 +67,7 @@ fun ClassList(classList: List<CharClass>) {
     ) {
         items(classList) { charClass ->
             ClassCard(charClass)
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacer_height))) // Use dimen resource
         }
     }
 }
@@ -77,13 +77,13 @@ fun ClassCard(charClass: CharClass) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        shape = RoundedCornerShape(8.dp)
+            .padding(dimensionResource(id = R.dimen.card_padding)), // Use dimen resource
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.card_corner_radius)) // Use dimen resource
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(dimensionResource(id = R.dimen.column_padding)) // Use dimen resource
         ) {
             // Class Name
             Text(
@@ -93,7 +93,7 @@ fun ClassCard(charClass: CharClass) {
                 color = orange
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacer_height))) // Use dimen resource
 
             // Hit Die and Primary Ability
             Row(
@@ -112,7 +112,7 @@ fun ClassCard(charClass: CharClass) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.spacer_height))) // Use dimen resource
 
             // Description
             Text(
