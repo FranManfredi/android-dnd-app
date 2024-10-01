@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,32 +38,56 @@ class WeaponViewModel @Inject constructor(
     private var _errorState = MutableStateFlow<String?>(null)
     val errorState = _errorState.asStateFlow()
 
-    suspend fun addWeapon(name: String, damage: String, to_hit: Int, image_url: String, damage_type: String, description: String) {
+    suspend fun addWeapon(
+        name: String,
+        damage: String,
+        to_hit: Int,
+        image_url: String,
+        damage_type: String,
+        description: String
+    ) {
         val newWeapon = Weapon(name, damage, to_hit, image_url, damage_type, description)
 
-        // Insert weapon on the IO dispatcher to avoid blocking the main thread
-        withContext(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            // Insert weapon into the database
             dungeonsHelperDatabase.weaponDao().insert(newWeapon)
-        }
 
-        // Emit the updated list to the StateFlow
-        val updatedList = _weaponList.value + newWeapon
-        _weaponList.emit(updatedList)
+            // Fetch and emit the updated list
+            val updatedList = dungeonsHelperDatabase.weaponDao().getAll()
+            _weaponList.emit(updatedList)
+        }
     }
 
     // Fetch items from API and update the item list
     fun getWeapons() {
-        _loadingState.value = true // Set loading state to true
+        _loadingState.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val weapons = dungeonsHelperDatabase.weaponDao().getAll()
+                _weaponList.emit(weapons) // Emit the initial database state
+                _loadingState.emit(false)
+            } catch (e: Exception) {
+                _loadingState.emit(false)
+                _errorState.emit("Failed to load weapons from database.")
+            }
+        }
+
+        // Optionally fetch from the API if you want to update the list dynamically
         api.getWeapons(
             context,
             onSuccess = { fetchedItems ->
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     val currentItems = _weaponList.value
-                    val updatedList = currentItems + fetchedItems.filterNot { fetchedItem ->
-                        currentItems.any { it.name == fetchedItem.name } // Ensure no duplicates
+                    val newItems = fetchedItems.filterNot { fetchedItem ->
+                        currentItems.any { it.name == fetchedItem.name }
                     }
+                    // Persist the new items to the database
+                    newItems.forEach { dungeonsHelperDatabase.weaponDao().insert(it) }
+
+                    // Fetch the updated list from the database
+                    val updatedList = dungeonsHelperDatabase.weaponDao().getAll()
                     _weaponList.emit(updatedList)
-                    _loadingState.emit(false) // Stop loading
+                    _loadingState.emit(false)
                 }
             },
             onFail = {
@@ -78,4 +101,5 @@ class WeaponViewModel @Inject constructor(
             }
         )
     }
+
 }
