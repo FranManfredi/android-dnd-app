@@ -25,10 +25,9 @@ class CharacterViewModel @Inject constructor(
                       characterClasses: Array<CharacterClass>,
                       baseStats: BaseStats,
                       proficiency: CharacterProficiency,
-                      background: String,
                       traits: Array<Trait>) {
 
-        val character = Character(name, race, characterClasses, baseStats, proficiency, background, traits, hp = null)
+        val character = Character(name, race, characterClasses, baseStats, proficiency, traits, hp = null)
         val newList = _characterList.value + character
         viewModelScope.launch {
             _characterList.emit(newList)

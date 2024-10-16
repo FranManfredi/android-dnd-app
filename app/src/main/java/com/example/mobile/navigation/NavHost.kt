@@ -19,7 +19,6 @@ import com.example.mobile.screen.races.Races
 import com.example.mobile.screen.settings.Settings
 import com.example.mobile.screen.spells.Spells
 import com.example.mobile.screen.weapons.Weapons
-import dagger.hilt.android.qualifiers.ApplicationContext
 
 
 @Composable

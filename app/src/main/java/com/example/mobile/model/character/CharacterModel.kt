@@ -6,10 +6,7 @@ data class Character(
     val characterClasses: Array<CharacterClass>?,
     val baseStats: BaseStats?,
     val proficiency: CharacterProficiency?,
-    val background: String,
     val traits: Array<Trait>?,
-
-    // untouchable element
     val hp: CharacterHp?,
 )
 
@@ -25,18 +22,6 @@ data class BaseStats(
 data class CharacterHp (
     val totalHitPoints: Int,
     val currentHitPoints: Int = totalHitPoints,
-    val hpStatus: StatusType = StatusType.ALIVE,
-    val deathSaves: deathSaves = deathSaves(),
-)
-
-enum class StatusType{
-    ALIVE,
-    DEATH_SAVE,
-}
-
-data class deathSaves(
-    val success: Int = 0,
-    val failure: Int = 0,
 )
 
 data class CharacterProficiency(
