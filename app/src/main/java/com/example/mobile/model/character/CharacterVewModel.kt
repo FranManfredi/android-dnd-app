@@ -3,9 +3,11 @@ package com.example.mobile.model.character
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mobile.apiManager.ApiServiceImpl
+import com.example.mobile.data.*
+import com.example.mobile.data.DungeonsHelperDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -16,21 +18,86 @@ class CharacterViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
 
-    private val api: ApiServiceImpl = ApiServiceImpl()
-    private var _characterList = MutableStateFlow(listOf<Character>())
+    private val dungeonsHelperDatabase = DungeonsHelperDatabase.getDatabase(context)
+
+    private val _characterList = MutableStateFlow<List<Character>>(emptyList())
     val characterList = _characterList.asStateFlow()
 
-    fun addCharacter( name: String,
-                      race: String,
-                      characterClasses: Array<CharacterClass>,
-                      baseStats: BaseStats,
-                      proficiency: CharacterProficiency,
-                      traits: Array<Trait>) {
+    private var _loadingState = MutableStateFlow(false)
+    val loadingState = _loadingState.asStateFlow()
 
-        val character = Character(name, race, characterClasses, baseStats, proficiency, traits, hp = null)
-        val newList = _characterList.value + character
-        viewModelScope.launch {
-            _characterList.emit(newList)
+    private var _errorState = MutableStateFlow<String?>(null)
+    val errorState = _errorState.asStateFlow()
+
+    init {
+        loadCharacters()
+    }
+
+    private fun loadCharacters() {
+        _loadingState.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val characters = dungeonsHelperDatabase.characterDao().getAll()
+                _characterList.emit(characters)
+                _loadingState.emit(false)
+            } catch (e: Exception) {
+                _loadingState.emit(false)
+                _errorState.emit("Failed to load characters from database.")
+            }
+        }
+    }
+
+    fun addCharacter(
+        name: String,
+        race: String?,
+        characterClasses: List<CharacterClass>,
+        baseStats: BaseStats,
+        proficiency: CharacterProficiency,
+        traits: List<Trait>,
+        hp: CharacterHp
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Insert base stats, proficiency, and hp first to generate IDs
+                val baseStatsId = dungeonsHelperDatabase.baseStatsDao().insert(baseStats)
+                val proficiencyId = dungeonsHelperDatabase.characterProficiencyDao().insert(proficiency)
+                val hpId = dungeonsHelperDatabase.characterHpDao().insert(hp)
+
+                // Create character with generated IDs (storing IDs as Long)
+                val newCharacter = Character(
+                    name = name,
+                    race = race,
+                    baseStatsId = baseStatsId.toString().toLong(),
+                    proficiencyId = proficiencyId.toString().toLong(),
+                    hpId = hpId.toString().toLong()
+                )
+
+                dungeonsHelperDatabase.characterDao().insert(newCharacter)
+
+                // Insert character classes and traits
+                characterClasses.forEach { charClass ->
+                    dungeonsHelperDatabase.characterClassDao().insert(charClass.copy(characterName = name))
+                }
+                traits.forEach { trait ->
+                    dungeonsHelperDatabase.traitDao().insert(trait.copy(characterName = name))
+                }
+
+                // Fetch and emit the updated list
+                loadCharacters()
+            } catch (e: Exception) {
+                _errorState.emit("Failed to add character.")
+            }
+        }
+    }
+
+    fun deleteCharacter(character: Character) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                dungeonsHelperDatabase.characterDao().delete(character)
+                loadCharacters()
+            } catch (e: Exception) {
+                _errorState.emit("Failed to delete character.")
+            }
         }
     }
 }

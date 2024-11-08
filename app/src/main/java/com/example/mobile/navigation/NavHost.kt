@@ -38,7 +38,7 @@ fun NavHostComposable(innerPadding: PaddingValues, navController: NavHostControl
             Compendium(navController)
         }
         composable(route = MobileScreen.Creator.name){
-            Creator()
+            Creator(navController = navController)
         }
         composable(route = MobileScreen.Weapons.name){
             Weapons()
