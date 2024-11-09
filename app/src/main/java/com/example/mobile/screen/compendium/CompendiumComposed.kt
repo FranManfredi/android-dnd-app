@@ -88,7 +88,6 @@ fun CircularPlusButton(onClick: () -> Unit) {
             .padding(horizontal = dimensionResource(id = R.dimen.compendium_padding))
             .height(dimensionResource(id = R.dimen.button_height)),
         contentPadding = PaddingValues(0.dp),
-        colors = ButtonDefaults.buttonColors(orange)
     ) {
         Icon(
             imageVector = Icons.Default.Add,
@@ -114,9 +113,8 @@ fun CompendiumButton(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = dimensionResource(id = R.dimen.compendium_padding)),
-        colors = ButtonDefaults.buttonColors(orange)
-    ) {
+            .padding(horizontal = dimensionResource(id = R.dimen.compendium_padding))
+        ) {
         Text(
             text = text,
             color = Color.White,

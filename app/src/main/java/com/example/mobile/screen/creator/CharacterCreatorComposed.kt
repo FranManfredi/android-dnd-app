@@ -53,7 +53,6 @@ fun Creator(
         ) {
             Text(
                 text = "Character Creator",
-                color = Color.Black,
                 style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold)
             )
 

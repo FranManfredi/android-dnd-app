@@ -60,7 +60,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation("androidx.compose.material3:material3:1.2.0-rc01")
+    implementation(libs.material3)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.constraintlayout)
@@ -72,13 +72,15 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation(libs.androidx.biometric)
+    kapt("com.google.dagger:hilt-android-compiler:2.49")
+
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     kapt("androidx.room:room-compiler:2.6.1")
 
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
 
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
