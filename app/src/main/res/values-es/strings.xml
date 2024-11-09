@@ -1,0 +1,68 @@
+<resources>
+    <string name="app_name">móvil</string>
+    <string name="top_var">Lista de personajes</string>
+    <string name="search_var">Buscar</string>
+
+    <string name="weapons">Armas</string>
+    <string name="spells">Hechizos</string>
+    <string name="armors">Armaduras</string>
+    <string name="items">Elementos</string>
+    <string name="classes">Clases</string>
+    <string name="races">carreras</string>
+
+    <string name="add">agregar</string>
+    <string name="addCompendium">Añadir al compendio</string>
+
+    <string name="weapon_damage">Daño</string>
+    <string name="weapon_to_hit">Para golpear</string>
+    <string name="weapon_damage_type">Tipo de daño</string>
+    <string name="weapon_description">Descripción</string>
+
+    <string name="spell_level">Nivel</string>
+    <string name="spell_casting_time">tiempo de lanzamiento</string>
+    <string name="spell_description">Descripción</string>
+
+    <string name="item_type">Tipo</string>
+    <string name="item_charges">Cargos</string>
+    <string name="item_recharge">Recargar</string>
+    <string name="item_description">Descripción</string>
+
+    <string name="class_hit_die">Golpear morir</string>
+    <string name="class_primary_ability">Habilidad primaria</string>
+    <string name="class_description">Descripción</string>
+
+    <string name="race_size">Tamaño</string>
+    <string name="race_speed">Velocidad</string>
+    <string name="race_description">Descripción</string>
+
+
+    <!-- Item Form -->
+    <string name="create_custom_item">Crear un artículo personalizado</string>
+    <string name="item_name">Nombre del artículo</string>
+    <string name="submit_item">Enviar artículo</string>
+
+    <!-- Class Form -->
+    <string name="create_custom_class">Crear una clase personalizada</string>
+    <string name="class_name">Nombre de clase</string>
+    <string name="class_saving_throws">Tiros de salvación</string>
+    <string name="submit_class">Enviar clase</string>
+
+    <!-- Race Form -->
+    <string name="create_custom_race">Crear una carrera personalizada</string>
+    <string name="race_name">Nombre de la carrera</string>
+    <string name="race_special_abilities">Habilidades especiales</string>
+    <string name="submit_race">Enviar carrera</string>
+
+    <!-- Spell Form -->
+    <string name="create_custom_spell">Crear un hechizo personalizado</string>
+    <string name="spell_name">Nombre del hechizo</string>
+    <string name="spell_damage">Daño de hechizo</string>
+    <string name="spell_damage_type">Tipo de daño</string>
+    <string name="submit_spell">Enviar hechizo</string>
+
+
+    <string name="create_weapon">Crea un arma personalizada</string>
+    <string name="weapon_name">Nombre del arma</string>
+    <string name="weapon_image_url">URL de la imagen</string>
+    <string name="submit_weapon">Enviar arma</string>
+</resources>
