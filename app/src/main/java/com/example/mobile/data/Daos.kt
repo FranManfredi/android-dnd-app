@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WeaponDao {
@@ -68,51 +69,27 @@ interface CharacterDao {
 
     @Delete
     fun delete(character: Character)
+
+    @Query("SELECT * FROM character WHERE name = :name LIMIT 1")
+    fun getCharacterByName(name: String): Flow<CharacterWithDetails?>
 }
 
 @Dao
 interface BaseStatsDao {
-    @Query("SELECT * FROM base_stats WHERE id = :id")
-    fun getById(id: Int): BaseStats?
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(baseStats: BaseStats)
-
-    @Update
-    fun update(baseStats: BaseStats)
-
-    @Delete
-    fun delete(baseStats: BaseStats)
-}
-
-@Dao
-interface CharacterHpDao {
-    @Query("SELECT * FROM character_hp WHERE id = :id")
-    fun getById(id: Int): CharacterHp?
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(characterHp: CharacterHp)
-
-    @Update
-    fun update(characterHp: CharacterHp)
-
-    @Delete
-    fun delete(characterHp: CharacterHp)
+    @Insert
+    fun insert(baseStats: BaseStats): Long
 }
 
 @Dao
 interface CharacterProficiencyDao {
-    @Query("SELECT * FROM character_proficiency WHERE id = :id")
-    fun getById(id: Int): CharacterProficiency?
+    @Insert
+    fun insert(proficiency: CharacterProficiency): Long
+}
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(proficiency: CharacterProficiency)
-
-    @Update
-    fun update(proficiency: CharacterProficiency)
-
-    @Delete
-    fun delete(proficiency: CharacterProficiency)
+@Dao
+interface CharacterHpDao {
+    @Insert
+    fun insert(hp: CharacterHp): Long
 }
 
 @Dao
@@ -149,5 +126,5 @@ interface TraitDao {
 interface CharacterWithDetailsDao {
     @Transaction
     @Query("SELECT * FROM character WHERE name = :characterName")
-    fun getCharacterWithDetails(characterName: String): CharacterWithDetails?
+    fun getCharacterWithDetails(characterName: String): Flow<CharacterWithDetails?>
 }

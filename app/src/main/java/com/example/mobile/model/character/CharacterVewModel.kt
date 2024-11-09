@@ -1,6 +1,7 @@
 package com.example.mobile.model.character
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mobile.data.*
@@ -8,6 +9,7 @@ import com.example.mobile.data.DungeonsHelperDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -33,7 +35,7 @@ class CharacterViewModel @Inject constructor(
         loadCharacters()
     }
 
-    private fun loadCharacters() {
+    fun loadCharacters() {
         _loadingState.value = true
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -63,13 +65,12 @@ class CharacterViewModel @Inject constructor(
                 val proficiencyId = dungeonsHelperDatabase.characterProficiencyDao().insert(proficiency)
                 val hpId = dungeonsHelperDatabase.characterHpDao().insert(hp)
 
-                // Create character with generated IDs (storing IDs as Long)
                 val newCharacter = Character(
                     name = name,
                     race = race,
-                    baseStatsId = baseStatsId.toString().toLong(),
-                    proficiencyId = proficiencyId.toString().toLong(),
-                    hpId = hpId.toString().toLong()
+                    baseStatsId = baseStatsId,
+                    proficiencyId = proficiencyId,
+                    hpId = hpId
                 )
 
                 dungeonsHelperDatabase.characterDao().insert(newCharacter)
@@ -82,9 +83,11 @@ class CharacterViewModel @Inject constructor(
                     dungeonsHelperDatabase.traitDao().insert(trait.copy(characterName = name))
                 }
 
-                // Fetch and emit the updated list
-                loadCharacters()
+                val updatedList = characterList.value + newCharacter
+                _characterList.emit(updatedList)
+
             } catch (e: Exception) {
+                Log.e("CharacterViewModel", "Failed to add character: ${e.localizedMessage}")
                 _errorState.emit("Failed to add character.")
             }
         }
@@ -94,10 +97,15 @@ class CharacterViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 dungeonsHelperDatabase.characterDao().delete(character)
+                // Refresh the character list after deletion
                 loadCharacters()
             } catch (e: Exception) {
                 _errorState.emit("Failed to delete character.")
             }
         }
+    }
+
+    fun getCharacterByName(name: String): Flow<CharacterWithDetails?> {
+        return dungeonsHelperDatabase.characterWithDetails().getCharacterWithDetails(name)
     }
 }

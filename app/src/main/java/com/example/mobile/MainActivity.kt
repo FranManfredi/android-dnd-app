@@ -43,46 +43,42 @@ class MainActivity : ComponentActivity() {
                         topBar = {
                             val navBackStackEntry by navController.currentBackStackEntryAsState()
                             navBackStackEntry?.destination?.route?.let {
-
-                                val topBarType = when (it) {
-                                    "Creator" -> TOPBAR_TYPES.CREATOR
-                                    "Weapons", "Spells", "Items", "Armor", "Classes", "Races", "CompendiumCreator" -> TOPBAR_TYPES.COMPENDIUM
+                                val topBarType = when {
+                                    it == "Creator" -> TOPBAR_TYPES.CREATOR
+                                    it in listOf("Weapons", "Spells", "Items", "Armor", "Classes", "Races", "CompendiumCreator") -> TOPBAR_TYPES.COMPENDIUM
+                                    it.contains("Character/") -> TOPBAR_TYPES.CHARACTER
                                     else -> TOPBAR_TYPES.NORMAL
                                 }
 
                                 TopBar(
                                     onNavigateToSettings = {
                                         navController.navigate(MobileScreen.Settings.name) {
-                                        popUpTo(navController.graph.startDestinationId) {
-                                            saveState = true
+                                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                            launchSingleTop = true
+                                            restoreState = true
                                         }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }},
+                                    },
                                     onNavigateToCreator = {
-                                        navController.navigate(MobileScreen.Creator.name){
-                                        popUpTo(navController.graph.startDestinationId) {
-                                            saveState = true
+                                        navController.navigate(MobileScreen.Creator.name) {
+                                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                            launchSingleTop = true
+                                            restoreState = true
                                         }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }},
+                                    },
                                     onNavigateToHome = {
-                                        navController.navigate(MobileScreen.Home.name){
-                                            popUpTo(navController.graph.startDestinationId) {
-                                                saveState = true
-                                            }
+                                        navController.navigate(MobileScreen.Home.name) {
+                                            popUpTo(MobileScreen.Home.name) { inclusive = true } // Clears stack to Home
                                             launchSingleTop = true
                                             restoreState = true
-                                        }},
+                                        }
+                                    },
                                     onNavigateToCompendium = {
-                                        navController.navigate(MobileScreen.Compendium.name){
-                                            popUpTo(navController.graph.startDestinationId) {
-                                                saveState = true
-                                            }
+                                        navController.navigate(MobileScreen.Compendium.name) {
+                                            popUpTo(navController.graph.startDestinationId) { saveState = true }
                                             launchSingleTop = true
                                             restoreState = true
-                                        }},
+                                        }
+                                    },
                                     title = it,
                                     type = topBarType
                                 )

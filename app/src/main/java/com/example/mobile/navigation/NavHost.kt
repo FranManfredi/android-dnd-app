@@ -9,6 +9,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.mobile.data.Character
+import com.example.mobile.screen.CharacterComposed
 import com.example.mobile.screen.classes.Classes
 import com.example.mobile.screen.compendium.Compendium
 import com.example.mobile.screen.compendium.creator.CompendiumCreator
@@ -29,7 +31,7 @@ fun NavHostComposable(innerPadding: PaddingValues, navController: NavHostControl
         modifier = Modifier.fillMaxSize().padding(innerPadding).padding(horizontal = 10.dp)
     ) {
         composable(route = MobileScreen.Home.name) {
-            Home()
+            Home(navController)
         }
         composable(route = MobileScreen.Settings.name) {
             Settings()
@@ -57,6 +59,11 @@ fun NavHostComposable(innerPadding: PaddingValues, navController: NavHostControl
         }
         composable(route = MobileScreen.CompendiumCreator.name){
             CompendiumCreator(navController)
+        }
+        composable(route = "${MobileScreen.Character.name}/{characterName}") { backStackEntry ->
+            // Retrieve the characterName from the backStackEntry arguments
+            val characterName = backStackEntry.arguments?.getString("characterName") ?: return@composable
+            CharacterComposed(navController = navController, characterName = characterName)
         }
     }
 }

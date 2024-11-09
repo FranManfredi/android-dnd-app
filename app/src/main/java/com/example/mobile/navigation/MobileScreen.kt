@@ -13,6 +13,7 @@ enum class MobileScreen {
     CompendiumCreator,
 
     Creator,
+    Character,
 
     Settings,
 }

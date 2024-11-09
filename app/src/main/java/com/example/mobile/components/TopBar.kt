@@ -39,15 +39,29 @@ fun TopBar(
             )
     ) {
         ButtonWithIcon(onNavigate = { onNavigateToSettings() }, icon = Icons.Filled.Settings)
-        Text(
-            text = title,
-            color = orange,
-            style = TextStyle.Default,
-            fontSize = dimensionResource(id = R.dimen.font_size_20sp).value.sp, // Use dimension for font size
-            fontWeight = FontWeight.Bold
-        )
         when (type) {
-            TOPBAR_TYPES.CREATOR -> {
+            TOPBAR_TYPES.CHARACTER -> {
+                Text(
+                    text = "Character",
+                    color = orange,
+                    style = TextStyle.Default,
+                    fontSize = dimensionResource(id = R.dimen.font_size_20sp).value.sp, // Use dimension for font size
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            else -> {
+                Text(
+                    text = title,
+                    color = orange,
+                    style = TextStyle.Default,
+                    fontSize = dimensionResource(id = R.dimen.font_size_20sp).value.sp, // Use dimension for font size
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+
+        when (type) {
+            TOPBAR_TYPES.CREATOR, TOPBAR_TYPES.CHARACTER -> {
                 ButtonWithIcon(onNavigate = { onNavigateToHome() }, icon = Icons.AutoMirrored.Rounded.ArrowBack)
             }
             TOPBAR_TYPES.COMPENDIUM -> {
@@ -63,5 +77,6 @@ fun TopBar(
 enum class TOPBAR_TYPES {
     NORMAL,
     CREATOR,
-    COMPENDIUM
+    COMPENDIUM,
+    CHARACTER
 }

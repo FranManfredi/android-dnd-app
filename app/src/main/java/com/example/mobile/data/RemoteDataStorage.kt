@@ -19,7 +19,7 @@ import androidx.room.RoomDatabase
         CharacterProficiency::class,
         Trait::class
     ],
-    version = 2
+    version = 10 // Incremented version number
 )
 abstract class DungeonsHelperDatabase : RoomDatabase() {
 
@@ -29,6 +29,7 @@ abstract class DungeonsHelperDatabase : RoomDatabase() {
     abstract fun charClassDao(): CharClassDao
     abstract fun raceDao(): RaceDao
     abstract fun characterDao(): CharacterDao
+    abstract fun characterWithDetails(): CharacterWithDetailsDao
     abstract fun baseStatsDao(): BaseStatsDao
     abstract fun characterHpDao(): CharacterHpDao
     abstract fun characterProficiencyDao(): CharacterProficiencyDao
