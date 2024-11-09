@@ -13,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -34,6 +33,7 @@ import javax.inject.Inject
 import androidx.compose.ui.res.dimensionResource
 
 import androidx.compose.ui.res.stringResource
+import com.example.mobile.navigation.getScreenTitle
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
@@ -66,12 +66,12 @@ class MainActivity : FragmentActivity() {
                         color = MaterialTheme.colorScheme.background
                     ) {
                         Scaffold(
-                            topBar = {
+                            topBar = @androidx.compose.runtime.Composable {
                                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                                 navBackStackEntry?.destination?.route?.let { route ->
                                     val topBarType = getTopBarType(route)
                                     TopBar(
-                                        title = route,
+                                        title = getScreenTitle(route),
                                         type = topBarType,
                                         onNavigateToSettings = { navigateTo(navController, MobileScreen.Settings.name) },
                                         onNavigateToCreator = { navigateTo(navController, MobileScreen.Creator.name) },

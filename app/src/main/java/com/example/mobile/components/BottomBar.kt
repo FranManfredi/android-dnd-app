@@ -1,22 +1,16 @@
 package com.example.mobile.components
 
-
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import com.example.mobile.R
 import com.example.mobile.navigation.MobileScreen
 import com.example.mobile.ui.theme.orange
 
@@ -26,27 +20,31 @@ fun BottomBar(
     onNavigate: (String) -> Unit,
 ) {
     val homeTab = TabBarItem(
-        title = MobileScreen.Home.name,
+        screen = MobileScreen.Home,
+        title = stringResource(id = R.string.title_home),
         selectedIcon = Icons.Filled.Home,
         unselectedIcon = Icons.Outlined.Home
     )
-    val settingsTab = TabBarItem(
-        title = MobileScreen.Compendium.name,
+    val compendiumTab = TabBarItem(
+        screen = MobileScreen.Compendium,
+        title = stringResource(id = R.string.title_compendium),
         selectedIcon = Icons.Filled.Star,
         unselectedIcon = Icons.Outlined.Star
     )
-    val moreTab = TabBarItem(
-        title = MobileScreen.Settings.name,
+    val settingsTab = TabBarItem(
+        screen = MobileScreen.Settings,
+        title = stringResource(id = R.string.title_settings),
         selectedIcon = Icons.Filled.Settings,
         unselectedIcon = Icons.Filled.Settings
     )
 
-    val tabBarItems = listOf(homeTab, settingsTab, moreTab)
+    val tabBarItems = listOf(homeTab, compendiumTab, settingsTab)
 
     TabView(tabBarItems, selectedRoute, onNavigate)
 }
 
 data class TabBarItem(
+    val screen: MobileScreen, // Use MobileScreen enum for routes
     val title: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
@@ -61,12 +59,12 @@ fun TabView(
 ) {
     NavigationBar {
         tabBarItems.forEach { tabBarItem ->
-            val isSelected = tabBarItem.title == selectedRoute
+            val isSelected = tabBarItem.screen.name == selectedRoute
 
             NavigationBarItem(
                 selected = isSelected,
                 onClick = {
-                    onNavigate(tabBarItem.title)
+                    onNavigate(tabBarItem.screen.name) // Navigate using route name
                 },
                 icon = {
                     TabBarIconView(
@@ -98,7 +96,7 @@ fun TabBarIconView(
 ) {
     BadgedBox(badge = { TabBarBadgeView(badgeAmount) }) {
         Icon(
-            imageVector = if (isSelected) {selectedIcon} else {unselectedIcon},
+            imageVector = if (isSelected) selectedIcon else unselectedIcon,
             contentDescription = title
         )
     }

@@ -103,4 +103,16 @@
     <string name="default_trait_description">Nunca tiene miedo</string>
     <string name="save_character">Guardar Personaje</string>
     <string name="error_fill_required_fields">Por favor, complete todos los campos obligatorios.</string>
+
+    <string name="title_home">Inicio</string>
+    <string name="title_settings">Configuración</string>
+    <string name="title_compendium">Compendio</string>
+    <string name="title_creator">Creador</string>
+    <string name="title_weapons">Armas</string>
+    <string name="title_spells">Hechizos</string>
+    <string name="title_items">Objetos</string>
+    <string name="title_classes">Clases</string>
+    <string name="title_races">Razas</string>
+    <string name="title_compendium_creator">Creador de Compendio</string>
+    <string name="title_character">Personaje</string>
 </resources>

@@ -103,4 +103,16 @@
     <string name="default_trait_description">Never afraid</string>
     <string name="save_character">Save Character</string>
     <string name="error_fill_required_fields">Please fill in all required fields.</string>
+
+    <string name="title_home">Home</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_compendium">Compendium</string>
+    <string name="title_creator">Creator</string>
+    <string name="title_weapons">Weapons</string>
+    <string name="title_spells">Spells</string>
+    <string name="title_items">Items</string>
+    <string name="title_classes">Classes</string>
+    <string name="title_races">Races</string>
+    <string name="title_compendium_creator">Compendium Creator</string>
+    <string name="title_character">Character</string>
 </resources>
