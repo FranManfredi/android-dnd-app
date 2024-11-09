@@ -11,9 +11,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.mobile.data.Character
+import com.example.mobile.R
 import com.example.mobile.data.CharacterWithDetails
 import com.example.mobile.model.character.CharacterViewModel
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.dimensionResource
 
 @Composable
 fun CharacterComposed(
@@ -21,13 +23,11 @@ fun CharacterComposed(
     navController: NavController,
     viewModel: CharacterViewModel = hiltViewModel()
 ) {
-    // Observe the character data from the ViewModel
     val character by viewModel.getCharacterByName(characterName).collectAsState(initial = null)
 
-    // If the character is null, show a loading or error message
     if (character == null) {
         Text(
-            text = "Loading character data...",
+            text = stringResource(id = R.string.loading_character_data),
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(Alignment.Center)
@@ -39,54 +39,52 @@ fun CharacterComposed(
 
 @Composable
 fun CharacterDetails(character: CharacterWithDetails, navController: NavController) {
-    // Scrollable content for details
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp)
+            .padding(dimensionResource(id = R.dimen.dp_16))
     ) {
-        // Header with character name and race
         Text(
             text = character.character.name,
             style = MaterialTheme.typography.headlineLarge,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.dp_8))
         )
         Text(
-            text = "Race: ${character.character.race ?: "Unknown"}",
+            text = stringResource(id = R.string.race, character.character.race ?: stringResource(id = R.string.unknown)),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_16)))
 
-        // Character Class
         Text(
-            text = "Class",
+            text = stringResource(id = R.string.character_class),
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.dp_8))
         )
         character.characterClasses?.forEach { charClass ->
-            Text(text = "${charClass.name} (Level ${charClass.level})", style = MaterialTheme.typography.bodyLarge)
+            Text(
+                text = stringResource(id = R.string.class_level, charClass.name, charClass.level),
+                style = MaterialTheme.typography.bodyLarge
+            )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_16)))
 
-        // Ability Scores
         Text(
-            text = "Ability Scores",
+            text = stringResource(id = R.string.ability_scores),
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.dp_8))
         )
         AbilityScoresSection(character)
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_16)))
 
-        // Traits
         Text(
-            text = "Traits",
+            text = stringResource(id = R.string.traits),
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.dp_8))
         )
         character.traits?.forEach { trait ->
             Text(
@@ -105,7 +103,6 @@ fun CharacterDetails(character: CharacterWithDetails, navController: NavControll
 
 @Composable
 fun AbilityScoresSection(character: CharacterWithDetails) {
-    // Display each ability score in a row
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween

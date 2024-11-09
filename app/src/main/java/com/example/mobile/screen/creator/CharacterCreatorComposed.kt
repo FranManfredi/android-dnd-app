@@ -8,13 +8,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.mobile.R
 import com.example.mobile.model.character.CharacterViewModel
 import com.example.mobile.data.CharacterClass
 import com.example.mobile.data.BaseStats
@@ -27,6 +27,27 @@ fun Creator(
     viewModel: CharacterViewModel = hiltViewModel(),
     navController: NavController
 ) {
+    val defaultTraitName = stringResource(id = R.string.default_trait_name)
+    val defaultTraitDescription = stringResource(id = R.string.default_trait_description)
+    val errorFillRequiredFields = stringResource(id = R.string.error_fill_required_fields)
+
+    CreatorContent(
+        viewModel = viewModel,
+        navController = navController,
+        defaultTraitName = defaultTraitName,
+        defaultTraitDescription = defaultTraitDescription,
+        errorFillRequiredFields = errorFillRequiredFields
+    )
+}
+
+@Composable
+fun CreatorContent(
+    viewModel: CharacterViewModel,
+    navController: NavController,
+    defaultTraitName: String,
+    defaultTraitDescription: String,
+    errorFillRequiredFields: String
+) {
     var name by remember { mutableStateOf("") }
     var race by remember { mutableStateOf("") }
     var selectedClass by remember { mutableStateOf("") }
@@ -38,7 +59,7 @@ fun Creator(
     var charisma by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    val scrollState = rememberScrollState() // For making the content scrollable
+    val scrollState = rememberScrollState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -47,46 +68,49 @@ fun Creator(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
-                .verticalScroll(scrollState), // Make the content scrollable
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(dimensionResource(id = R.dimen.padding_16dp))
+                .verticalScroll(scrollState),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.spacing_8dp))
         ) {
             Text(
-                text = "Character Creator",
-                style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                text = stringResource(id = R.string.character_creator_title),
+                style = MaterialTheme.typography.headlineMedium
             )
 
             TextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("Name") },
+                label = { Text(stringResource(id = R.string.label_name)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
             TextField(
                 value = race,
                 onValueChange = { race = it },
-                label = { Text("Race") },
+                label = { Text(stringResource(id = R.string.label_race)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
             TextField(
                 value = selectedClass,
                 onValueChange = { selectedClass = it },
-                label = { Text("Class") },
+                label = { Text(stringResource(id = R.string.label_class)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Text(text = "Ability Scores", fontWeight = FontWeight.Bold)
+            Text(
+                text = stringResource(id = R.string.ability_scores),
+                fontWeight = FontWeight.Bold
+            )
 
-            AbilityScoreField(label = "Strength", value = strength) { strength = it }
-            AbilityScoreField(label = "Dexterity", value = dexterity) { dexterity = it }
-            AbilityScoreField(label = "Constitution", value = constitution) { constitution = it }
-            AbilityScoreField(label = "Intelligence", value = intelligence) { intelligence = it }
-            AbilityScoreField(label = "Wisdom", value = wisdom) { wisdom = it }
-            AbilityScoreField(label = "Charisma", value = charisma) { charisma = it }
+            AbilityScoreField(label = stringResource(id = R.string.strength), value = strength) { strength = it }
+            AbilityScoreField(label = stringResource(id = R.string.dexterity), value = dexterity) { dexterity = it }
+            AbilityScoreField(label = stringResource(id = R.string.constitution), value = constitution) { constitution = it }
+            AbilityScoreField(label = stringResource(id = R.string.intelligence), value = intelligence) { intelligence = it }
+            AbilityScoreField(label = stringResource(id = R.string.wisdom), value = wisdom) { wisdom = it }
+            AbilityScoreField(label = stringResource(id = R.string.charisma), value = charisma) { charisma = it }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_16)))
 
             Button(
                 onClick = {
@@ -102,13 +126,13 @@ fun Creator(
                     val characterClass = CharacterClass(
                         name = selectedClass,
                         level = 1,
-                        characterName = name // Pass character name here
+                        characterName = name
                     )
 
                     val trait = Trait(
-                        name = "Brave",
-                        description = "Never afraid",
-                        characterName = name // Pass character name here
+                        name = defaultTraitName,
+                        description = defaultTraitDescription,
+                        characterName = name
                     )
 
                     if (name.isNotBlank() && race.isNotBlank()) {
@@ -131,22 +155,22 @@ fun Creator(
                             hp = CharacterHp(totalHitPoints = 10, currentHitPoints = 10)
                         )
                         errorMessage = null
-                        navController.popBackStack() // Navigate back to the previous screen
+                        navController.popBackStack()
                     } else {
-                        errorMessage = "Please fill in all required fields."
+                        errorMessage = errorFillRequiredFields
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Save Character")
+                Text(stringResource(id = R.string.save_character))
             }
 
             errorMessage?.let {
                 Text(
                     text = it,
                     color = Color.Red,
-                    style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold),
-                    modifier = Modifier.padding(top = 8.dp)
+                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                    modifier = Modifier.padding(top = dimensionResource(id = R.dimen.spacing_8dp))
                 )
             }
         }

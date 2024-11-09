@@ -31,6 +31,10 @@ import com.example.mobile.ui.theme.MobileTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+import androidx.compose.ui.res.dimensionResource
+
+import androidx.compose.ui.res.stringResource
+
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
 
@@ -51,14 +55,14 @@ class MainActivity : FragmentActivity() {
                 val isDarkTheme = when (themeOption) {
                     THEME_OPTION.LIGHT -> false
                     THEME_OPTION.DARK -> true
-                    else -> isSystemInDarkTheme()  // Use system default
+                    else -> isSystemInDarkTheme()
                 }
 
                 MobileTheme(darkTheme = isDarkTheme) {
                     Surface(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(top = 35.dp),
+                            .padding(top = dimensionResource(id = R.dimen.dp_35)),
                         color = MaterialTheme.colorScheme.background
                     ) {
                         Scaffold(
@@ -118,22 +122,22 @@ class MainActivity : FragmentActivity() {
                 if (!isAuthenticated) biometricAuthManager.authenticate(context, {}, onSuccess, {})
             }
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
-                AuthenticationMessage("This device does not support biometric authentication.")
+                AuthenticationMessage(stringResource(id = R.string.biometric_error_no_hardware))
             }
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
-                AuthenticationMessage("Biometric authentication is currently unavailable.")
+                AuthenticationMessage(stringResource(id = R.string.biometric_error_hw_unavailable))
             }
             BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED -> {
-                AuthenticationMessage("Security update is required for biometric authentication.")
+                AuthenticationMessage(stringResource(id = R.string.biometric_error_security_update_required))
             }
             BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED -> {
-                AuthenticationMessage("This version of Android does not support biometric authentication.")
+                AuthenticationMessage(stringResource(id = R.string.biometric_error_unsupported))
             }
             BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> {
-                AuthenticationMessage("Unable to determine biometric authentication status.")
+                AuthenticationMessage(stringResource(id = R.string.biometric_status_unknown))
             }
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
-                AuthenticationMessage("No biometric data is enrolled.")
+                AuthenticationMessage(stringResource(id = R.string.biometric_error_none_enrolled))
             }
         }
     }

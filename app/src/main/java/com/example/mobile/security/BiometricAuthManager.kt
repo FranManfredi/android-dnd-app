@@ -5,10 +5,14 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricPrompt
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import com.example.mobile.R
 import javax.inject.Inject
 class BiometricAuthManager @Inject constructor() {
+    @Composable
     fun authenticate(context: Context, onError: () -> Unit, onSuccess: () -> Unit, onFail: () -> Unit) {
         val executor = ContextCompat.getMainExecutor(context)
         val biometricPrompt = BiometricPrompt(
@@ -35,9 +39,9 @@ class BiometricAuthManager @Inject constructor() {
         )
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setAllowedAuthenticators(BIOMETRIC_STRONG)
-            .setTitle("Biometric Authentication")
-            .setSubtitle("Log in using your biometric credentials")
-            .setNegativeButtonText("Cancel")
+            .setTitle(stringResource(R.string.biometric_title))
+            .setSubtitle(stringResource(R.string.biometric_subtitle))
+            .setNegativeButtonText(stringResource(R.string.biometric_cancel_button))
             .build()
         biometricPrompt.authenticate(promptInfo)
     }

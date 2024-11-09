@@ -7,8 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.mobile.R
 import com.example.mobile.data.THEME_OPTION
 import com.example.mobile.model.settings.SettingsViewModel
 
@@ -25,28 +27,31 @@ fun Settings(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(dimensionResource(id = R.dimen.dp_16)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Choose Theme", style = MaterialTheme.typography.headlineMedium)
+            Text(
+                text = stringResource(id = R.string.choose_theme),
+                style = MaterialTheme.typography.headlineMedium
+            )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp_24)))
 
             ThemeOptionItem(
-                label = "System Default",
+                label = stringResource(id = R.string.system_default),
                 selected = themeOption.value == THEME_OPTION.DEFAULT,
                 onSelect = { viewModel.setThemeOption(THEME_OPTION.DEFAULT) }
             )
 
             ThemeOptionItem(
-                label = "Light Theme",
+                label = stringResource(id = R.string.light_theme),
                 selected = themeOption.value == THEME_OPTION.LIGHT,
                 onSelect = { viewModel.setThemeOption(THEME_OPTION.LIGHT) }
             )
 
             ThemeOptionItem(
-                label = "Dark Theme",
+                label = stringResource(id = R.string.dark_theme),
                 selected = themeOption.value == THEME_OPTION.DARK,
                 onSelect = { viewModel.setThemeOption(THEME_OPTION.DARK) }
             )
@@ -60,14 +65,14 @@ fun ThemeOptionItem(label: String, selected: Boolean, onSelect: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = dimensionResource(id = R.dimen.dp_8))
             .clickable { onSelect() }
     ) {
         RadioButton(
             selected = selected,
             onClick = onSelect
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.dp_8)))
         Text(text = label, style = MaterialTheme.typography.bodyLarge)
     }
 }

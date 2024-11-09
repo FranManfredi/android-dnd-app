@@ -1,7 +1,5 @@
 package com.example.mobile.screen.home
 
-import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,8 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.mobile.R
@@ -24,14 +20,15 @@ import com.example.mobile.data.Character
 import com.example.mobile.model.character.CharacterViewModel
 import com.example.mobile.navigation.MobileScreen
 
+import androidx.compose.ui.res.dimensionResource
+
 @Composable
 fun Home(
     navController: NavController,
     viewModel: CharacterViewModel = hiltViewModel()
 ) {
-    // Trigger data load when Home is entered
     LaunchedEffect(Unit) {
-        viewModel.loadCharacters() // Reload characters on each entry
+        viewModel.loadCharacters()
     }
 
     var query by remember { mutableStateOf("") }
@@ -52,8 +49,8 @@ fun Home(
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                contentPadding = PaddingValues(dimensionResource(id = R.dimen.dp_16)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.dp_8))
             ) {
                 items(filteredCharacters) { character ->
                     CharacterCard(character = character, onClick = {
@@ -65,53 +62,46 @@ fun Home(
     }
 }
 
-
-
-
 @Composable
 fun CharacterCard(character: Character, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp) // Add some spacing between cards
+            .padding(vertical = dimensionResource(id = R.dimen.dp_8))
             .clickable { onClick() },
-        elevation = CardDefaults.cardElevation(6.dp),
-        shape = MaterialTheme.shapes.medium // Rounded corners for a smoother look
+        elevation = CardDefaults.cardElevation(dimensionResource(id = R.dimen.dp_6)),
+        shape = MaterialTheme.shapes.medium
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surfaceVariant) // Subtle background color
-                .padding(16.dp)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .padding(dimensionResource(id = R.dimen.dp_16))
         ) {
-            // Decorative Icon or Image Placeholder
             Icon(
                 imageVector = Icons.Default.Person,
-                contentDescription = "Character Icon",
+                contentDescription = stringResource(id = R.string.character_icon),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
-                    .size(48.dp)
-                    .padding(end = 16.dp)
+                    .size(dimensionResource(id = R.dimen.dp_48))
+                    .padding(end = dimensionResource(id = R.dimen.dp_16))
             )
 
             Column(modifier = Modifier.weight(1f)) {
-                // Name Text with Larger Font and Bold Style
                 Text(
                     text = character.name,
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1 // Limit name to one line if it's too long
+                    maxLines = 1
                 )
 
-                // Race Text with Smaller Font and Muted Color
                 Text(
-                    text = "Race: ${character.race ?: "Unknown"}",
+                    text = stringResource(id = R.string.character_race, character.race ?: stringResource(id = R.string.unknown_race)),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 4.dp)
+                    modifier = Modifier.padding(top = dimensionResource(id = R.dimen.dp_4))
                 )
             }
         }
     }
 }
-
