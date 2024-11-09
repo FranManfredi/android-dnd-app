@@ -52,6 +52,18 @@ data class Race (
     val special_abilities: String
 )
 
+@Entity(tableName = "settings")
+data class Settings(
+    @PrimaryKey val id: String = "default",
+    val themeOption: THEME_OPTION = THEME_OPTION.DEFAULT,  // Foreign key reference to Character
+)
+
+enum class THEME_OPTION {
+    DEFAULT,
+    DARK,
+    LIGHT
+}
+
 @Entity(tableName = "character")
 data class Character(
     @PrimaryKey val name: String,

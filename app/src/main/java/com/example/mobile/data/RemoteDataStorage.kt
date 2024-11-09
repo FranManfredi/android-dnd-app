@@ -17,9 +17,11 @@ import androidx.room.RoomDatabase
         BaseStats::class,
         CharacterHp::class,
         CharacterProficiency::class,
-        Trait::class
+        Trait::class,
+        Settings::class
     ],
-    version = 10 // Incremented version number
+    version = 12,
+    exportSchema = true // Optional: Helps track changes with Room
 )
 abstract class DungeonsHelperDatabase : RoomDatabase() {
 
@@ -35,6 +37,7 @@ abstract class DungeonsHelperDatabase : RoomDatabase() {
     abstract fun characterProficiencyDao(): CharacterProficiencyDao
     abstract fun characterClassDao(): CharacterClassDao
     abstract fun traitDao(): TraitDao
+    abstract fun settingsDao(): SettingsDao
 
     companion object {
         @Volatile
@@ -47,7 +50,7 @@ abstract class DungeonsHelperDatabase : RoomDatabase() {
                     DungeonsHelperDatabase::class.java,
                     "Dungeons_Helper_database"
                 )
-                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration() // or add migrations as needed
                     .build()
                 INSTANCE = instance
                 instance

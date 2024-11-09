@@ -128,3 +128,15 @@ interface CharacterWithDetailsDao {
     @Query("SELECT * FROM character WHERE name = :characterName")
     fun getCharacterWithDetails(characterName: String): Flow<CharacterWithDetails?>
 }
+
+@Dao
+interface SettingsDao {
+    @Query("SELECT * FROM settings LIMIT 1")
+    fun getSetting(): Flow<Settings?> // No suspend modifier needed
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSetting(setting: Settings)
+
+    @Update
+    suspend fun updateSetting(setting: Settings)
+}

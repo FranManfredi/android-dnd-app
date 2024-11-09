@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
@@ -14,12 +15,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mobile.components.BottomBar
 import com.example.mobile.components.TOPBAR_TYPES
 import com.example.mobile.components.TopBar
+import com.example.mobile.data.THEME_OPTION
+import com.example.mobile.model.settings.SettingsViewModel
 import com.example.mobile.navigation.MobileScreen
 import com.example.mobile.navigation.NavHostComposable
 import com.example.mobile.security.BiometricAuthManager
@@ -38,10 +42,18 @@ class MainActivity : FragmentActivity() {
         enableEdgeToEdge()
         setContent {
             var isAuthenticated by remember { mutableStateOf(false) }
-            var isDarkTheme by remember { mutableStateOf(false) } // Track theme state
 
             if (isAuthenticated) {
                 val navController = rememberNavController()
+                val settingsViewModel: SettingsViewModel = hiltViewModel()
+                val themeOption by settingsViewModel.themeOption.collectAsState()
+
+                val isDarkTheme = when (themeOption) {
+                    THEME_OPTION.LIGHT -> false
+                    THEME_OPTION.DARK -> true
+                    else -> isSystemInDarkTheme()  // Use system default
+                }
+
                 MobileTheme(darkTheme = isDarkTheme) {
                     Surface(
                         modifier = Modifier

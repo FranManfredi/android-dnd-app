@@ -1,25 +1,22 @@
 package com.example.mobile.screen.settings
 
-import SettingsViewModel
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.mobile.data.THEME_OPTION
+import com.example.mobile.model.settings.SettingsViewModel
 
 @Composable
 fun Settings(
-    themeViewModel: SettingsViewModel = hiltViewModel() // Inject ViewModel
+    viewModel: SettingsViewModel = hiltViewModel()
 ) {
-    // Collect the current theme state as a State<Boolean>
-    val isDarkTheme = themeViewModel.isDarkTheme.collectAsState()
+    val themeOption = viewModel.themeOption.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -32,14 +29,45 @@ fun Settings(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Text("Choose Theme", style = MaterialTheme.typography.headlineMedium)
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Button(
-                onClick = { themeViewModel.toggleTheme() }
-            ) {
-                Text(text = if (isDarkTheme.value) "Switch to Light Theme" else "Switch to Dark Theme")
-            }
+            ThemeOptionItem(
+                label = "System Default",
+                selected = themeOption.value == THEME_OPTION.DEFAULT,
+                onSelect = { viewModel.setThemeOption(THEME_OPTION.DEFAULT) }
+            )
+
+            ThemeOptionItem(
+                label = "Light Theme",
+                selected = themeOption.value == THEME_OPTION.LIGHT,
+                onSelect = { viewModel.setThemeOption(THEME_OPTION.LIGHT) }
+            )
+
+            ThemeOptionItem(
+                label = "Dark Theme",
+                selected = themeOption.value == THEME_OPTION.DARK,
+                onSelect = { viewModel.setThemeOption(THEME_OPTION.DARK) }
+            )
         }
+    }
+}
+
+@Composable
+fun ThemeOptionItem(label: String, selected: Boolean, onSelect: () -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable { onSelect() }
+    ) {
+        RadioButton(
+            selected = selected,
+            onClick = onSelect
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = label, style = MaterialTheme.typography.bodyLarge)
     }
 }
