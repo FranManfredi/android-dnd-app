@@ -8,19 +8,13 @@ import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mobile.components.BottomBar
@@ -35,6 +29,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
+
     @Inject
     lateinit var biometricAuthManager: BiometricAuthManager
 
@@ -43,11 +38,11 @@ class MainActivity : FragmentActivity() {
         enableEdgeToEdge()
         setContent {
             var isAuthenticated by remember { mutableStateOf(false) }
+            var isDarkTheme by remember { mutableStateOf(false) } // Track theme state
 
             if (isAuthenticated) {
                 val navController = rememberNavController()
-
-                MobileTheme {
+                MobileTheme(darkTheme = isDarkTheme) {
                     Surface(
                         modifier = Modifier
                             .fillMaxSize()
@@ -57,65 +52,25 @@ class MainActivity : FragmentActivity() {
                         Scaffold(
                             topBar = {
                                 val navBackStackEntry by navController.currentBackStackEntryAsState()
-                                navBackStackEntry?.destination?.route?.let {
-                                    val topBarType = when {
-                                        it == "Creator" -> TOPBAR_TYPES.CREATOR
-                                        it in listOf("Weapons", "Spells", "Items", "Armor", "Classes", "Races", "CompendiumCreator") -> TOPBAR_TYPES.COMPENDIUM
-                                        it.contains("Character/") -> TOPBAR_TYPES.CHARACTER
-                                        else -> TOPBAR_TYPES.NORMAL
-                                    }
-
+                                navBackStackEntry?.destination?.route?.let { route ->
+                                    val topBarType = getTopBarType(route)
                                     TopBar(
-                                        onNavigateToSettings = {
-                                            navController.navigate(MobileScreen.Settings.name) {
-                                                popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                                launchSingleTop = true
-                                                restoreState = true
-                                            }
-                                        },
-                                        onNavigateToCreator = {
-                                            navController.navigate(MobileScreen.Creator.name) {
-                                                popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                                launchSingleTop = true
-                                                restoreState = true
-                                            }
-                                        },
-                                        onNavigateToHome = {
-                                            navController.navigate(MobileScreen.Home.name) {
-                                                popUpTo(MobileScreen.Home.name) { inclusive = true }
-                                                launchSingleTop = true
-                                                restoreState = true
-                                            }
-                                        },
-                                        onNavigateToCompendium = {
-                                            navController.navigate(MobileScreen.Compendium.name) {
-                                                popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                                launchSingleTop = true
-                                                restoreState = true
-                                            }
-                                        },
-                                        title = it,
-                                        type = topBarType
+                                        title = route,
+                                        type = topBarType,
+                                        onNavigateToSettings = { navigateTo(navController, MobileScreen.Settings.name) },
+                                        onNavigateToCreator = { navigateTo(navController, MobileScreen.Creator.name) },
+                                        onNavigateToHome = { navigateToHome(navController) },
+                                        onNavigateToCompendium = { navigateTo(navController, MobileScreen.Compendium.name) },
                                     )
                                 }
                             },
                             bottomBar = {
                                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                                 val currentRoute = navBackStackEntry?.destination?.route
-
-                                val hideBottomBarRoutes = listOf(MobileScreen.Creator.name)
-                                if (currentRoute !in hideBottomBarRoutes) {
+                                if (currentRoute !in listOf(MobileScreen.Creator.name)) {
                                     BottomBar(
                                         selectedRoute = currentRoute ?: MobileScreen.Home.name,
-                                        onNavigate = { screen ->
-                                            navController.navigate(screen) {
-                                                popUpTo(navController.graph.startDestinationId) {
-                                                    saveState = true
-                                                }
-                                                launchSingleTop = true
-                                                restoreState = true
-                                            }
-                                        }
+                                        onNavigate = { screen -> navigateTo(navController, screen) }
                                     )
                                 }
                             },
@@ -135,7 +90,7 @@ class MainActivity : FragmentActivity() {
     }
 
     @Composable
-    fun BiometricAuthentication(
+    private fun BiometricAuthentication(
         isAuthenticated: Boolean,
         onSuccess: () -> Unit,
         biometricAuthManager: BiometricAuthManager
@@ -148,28 +103,59 @@ class MainActivity : FragmentActivity() {
 
         when (isBiometricAvailable) {
             BiometricManager.BIOMETRIC_SUCCESS -> {
-                if (!isAuthenticated) {
-                    biometricAuthManager.authenticate(context, {}, onSuccess, {})
-                }
+                if (!isAuthenticated) biometricAuthManager.authenticate(context, {}, onSuccess, {})
             }
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
-                Text(text = "This device does not support biometric authentication.")
+                AuthenticationMessage("This device does not support biometric authentication.")
             }
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
-                Text(text = "Biometric authentication is currently unavailable.")
+                AuthenticationMessage("Biometric authentication is currently unavailable.")
             }
             BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED -> {
-                Text(text = "Security update is required for biometric authentication.")
+                AuthenticationMessage("Security update is required for biometric authentication.")
             }
             BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED -> {
-                Text(text = "This version of Android does not support biometric authentication.")
+                AuthenticationMessage("This version of Android does not support biometric authentication.")
             }
             BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> {
-                Text(text = "Unable to determine biometric authentication status.")
+                AuthenticationMessage("Unable to determine biometric authentication status.")
             }
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
-                Text(text = "No biometric data is enrolled.")
+                AuthenticationMessage("No biometric data is enrolled.")
             }
+        }
+    }
+
+    @Composable
+    private fun AuthenticationMessage(message: String) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            Text(text = message)
+        }
+    }
+
+    private fun getTopBarType(route: String): TOPBAR_TYPES = when {
+        route == "Creator" -> TOPBAR_TYPES.CREATOR
+        route in listOf("Weapons", "Spells", "Items", "Armor", "Classes", "Races", "CompendiumCreator") -> TOPBAR_TYPES.COMPENDIUM
+        route.contains("Character/") -> TOPBAR_TYPES.CHARACTER
+        else -> TOPBAR_TYPES.NORMAL
+    }
+
+    private fun navigateTo(navController: NavHostController, route: String) {
+        navController.navigate(route) {
+            popUpTo(navController.graph.startDestinationId) { saveState = true }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
+    private fun navigateToHome(navController: NavHostController) {
+        navController.navigate(MobileScreen.Home.name) {
+            popUpTo(MobileScreen.Home.name) { inclusive = true }
+            launchSingleTop = true
+            restoreState = true
         }
     }
 }
