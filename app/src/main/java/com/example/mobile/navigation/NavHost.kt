@@ -36,7 +36,7 @@ private val screenTitles = mapOf(
     MobileScreen.Classes.name to R.string.title_classes,
     MobileScreen.Races.name to R.string.title_races,
     MobileScreen.CompendiumCreator.name to R.string.title_compendium_creator,
-    MobileScreen.Character.name to R.string.title_character
+//    MobileScreen.Character.name to R.string.title_character
 )
 
 @Composable
