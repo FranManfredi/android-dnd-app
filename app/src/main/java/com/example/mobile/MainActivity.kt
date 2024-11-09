@@ -66,7 +66,7 @@ class MainActivity : FragmentActivity() {
                         color = MaterialTheme.colorScheme.background
                     ) {
                         Scaffold(
-                            topBar = @androidx.compose.runtime.Composable {
+                            topBar = @Composable {
                                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                                 navBackStackEntry?.destination?.route?.let { route ->
                                     val topBarType = getTopBarType(route)
@@ -169,9 +169,7 @@ class MainActivity : FragmentActivity() {
 
     private fun navigateToHome(navController: NavHostController) {
         navController.navigate(MobileScreen.Home.name) {
-            popUpTo(MobileScreen.Home.name) { inclusive = true }
-            launchSingleTop = true
-            restoreState = true
+            popUpTo(0) { inclusive = true } // Clears the backstack up to the root
         }
     }
 }
